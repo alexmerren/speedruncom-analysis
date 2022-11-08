@@ -8,7 +8,7 @@ too.
 ## Contents
 
  - [Getting Data](#getting-data)
- - [Saving Data as JSON](#saving-data-as-json)
+ - [Saving Data as CSV](#saving-data-as-csv)
 
 ## Getting Data
 
@@ -22,17 +22,6 @@ All the code that I have written is contained in `/srcomwrapper`, specifically
 in `srcom.py`. Here you will find functions that relate to retrieving data both
 as individual structs or collections that have been purpose made.
 
-## Saving Data as JSON
+## Saving Data as CSV
 
-When you have changed what you want to get inside of `main.py`, the next step
-is to save this from stdout into a JSON file. I have implemented a Makefile
-that will use [JQ](https://stedolan.github.io/jq/) to format JSON and save it
-to a file. You can use it in the following:
-
-```bash
-make saveoutput filename=testfilename.json
-```
-
-The above command will save a file into the location of
-`data/testfilename.json`. This (should) be properly formatted to be used in
-some other program.
+This will be completed when CSV saving has been implemented.
