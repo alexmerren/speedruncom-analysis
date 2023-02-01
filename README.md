@@ -1,27 +1,28 @@
-# Literature Review Data Collection
+# Final Project Data Collection & Data Analysis
 
-This repository is the center of data collection for my literature review on
-applying machine learning techniques to speed running. This document will go
-over the different things that I can get from my data, and how you can do that
-too.
+This repository is the centre of the data collection and data analysis for the
+final project of my undergraduate degree. My aim of this repository is to
+encapsulate the logic for data collection and analysis. I will be getting the
+data from [speedrun.com](https://www.speedrun.com) and analysing it using
+machine learning techniques. Specifically, I will be using network machine
+learning algorithms such as Deepwalk and Node2Vec. Furthermore, I may use
+clustering and regerssion techniques to complete further analysis.
 
-## Contents
+## How does this work?
 
- - [Getting Data](#getting-data)
- - [Saving Data as CSV](#saving-data-as-csv)
+This repository is split into four logical directories:
+* [Data Collector](/collector) - Code using srcomapi for requests, and custom formatting into the data repository.
+* [Data](/data) - The repository of all the formatted data that I have collected.
+* [Speedrun.com API](/srcomapi) - A wrapper for the speedrun.com API created by [blha303](https://github.com/blha303).
+* [Analysing](/notebook) - A repository for the Jupyter Notebooks or other analysis programs.
 
-## Getting Data
+## Usage
 
-In this project I am getting data directly from the [speedrun.com REST
-API](https://github.com/speedruncomorg/api). This is implemented (quite nicely)
-in Python in the form of [srcomapi](https://github.com/blha303/srcomapi). I
-have written a wrapper around this to facilitate the data retrieval that will
-be useful for my dissertation.
+It's probably best to use your own scripts that wrap the srcomapi package, but
+the [data](/data) may be useful.
 
-All the code that I have written is contained in `/srcomwrapper`, specifically
-in `srcom.py`. Here you will find functions that relate to retrieving data both
-as individual structs or collections that have been purpose made.
+## Thanks
 
-## Saving Data as CSV
-
-This will be completed when CSV saving has been implemented.
+A big thank you to [blha303](https://github.com/blha303) for creating the
+[srcomapi repository](https://github.com/blha303/srcomapi). It has saved me
+countless hours creating my own wrapper for the API, you have my thanks!
