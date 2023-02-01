@@ -1,17 +1,7 @@
-from srcomwrapper.srcom import Srcom
-import json
-
-def json_print(thing):
-    print(json.dumps(thing))
+from collector import collector
 
 def main():
-    api = Srcom(api_debug=0)
-
-    try:
-        result = api.all_other_runs_for_players_in_category("super mario odyssey", "Any%")
-        json_print(result)
-    except KeyboardInterrupt:
-        print("Cancelling...")
+    collector.RelatedGamesCollector("Temple Run 2").run()
 
 if __name__ == "__main__":
     main()
