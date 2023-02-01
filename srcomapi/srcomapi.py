@@ -3,6 +3,7 @@ from http.client import responses
 from os.path import dirname
 from os import environ
 import inspect
+import time
 
 import srcomapi
 import srcomapi.datatypes as datatypes
@@ -64,9 +65,13 @@ class SpeedrunCom(object):
                     raise APIRequestException((response.status_code, responses[response.status_code], uri[len(API_URL):]), response)
         else:
             response = requests.get(uri, **kwargs)
+            if response.status_code == 420:
+                if self.debug >= 1: print("request limit hit. Sleeping for 1s")
+                time.sleep(5)
+                response = requests.get(uri, **kwargs)
             if response.status_code == 404:
                 raise APIRequestException((response.status_code, responses[response.status_code], uri[len(API_URL):]), response)
-            data = response.json()["data"]
+            data = response.json().get("data")
             try:
                 response_size = response.json()['pagination']['size']
                 response_max_size = response.json()['pagination']['max']

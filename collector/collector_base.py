@@ -5,13 +5,18 @@ class CollectorBase:
     def __init__(self, debug=0) -> None :
         self.api = srcomapi.SpeedrunCom()
         self.api.debug = debug 
+        self.game_cache = {}
 
     def get_game_id(self, name) -> str :
         game = self.api.search(srcomapi.datatypes.Game, {"name": name})[0]
         return game.id
 
     def get_game(self, game_id) -> srcomapi.datatypes.Game :
-        return self.api.get_game(game_id)
+        game = self.game_cache.get(game_id)
+        if game != None:
+            return game
+        self.game_cache[game] = self.api.get_game(game_id)
+        return self.game_cache[game] 
 
     def get_category_id(self, game, category_name) -> str:
         for category in game.categories:
@@ -23,8 +28,7 @@ class CollectorBase:
         for category in game.categories:
             if category_id == category.id:
                 return category
-        return srcomapi.datatypes.Category()
-
+        return None
 
     def get_user(self, user_id) -> srcomapi.datatypes.User:
         return self.api.get_user(user_id)
