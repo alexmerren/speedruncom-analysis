@@ -1,22 +1,31 @@
-from . import collector_base 
-
 import requests
+import time 
 
+from . import collector_base 
 from datetime import timedelta, datetime
 
 FINAL_DATE = datetime(2023, 1, 1)
 
+class GameInfoCollector:
+    def __init__(self, name) -> None:
+        base = collector_base.CollectorBase(debug=1)
+        name = name.replace(" ", "_", -1).lower()
+        self.api = Collector(base, f"data/game_info/{name}.csv")
+
+    def run(self) -> None:
+        self.api.get_game_information()
+
 class RelatedGamesCollector:
     def __init__(self, name: str) -> None:
-        base = collector_base.CollectorBase(debug=1)
+        base = collector_base.CollectorBase(debug=0)
         name = name.replace(" ", "_", -1).lower()
         self.api = Collector(base, f"data/related_games/{name}.csv")
         self.game_id = base.get_game_id(name)
         self.categories = base.get_game(self.game_id).categories
 
-    def run(self) -> None:
+    def run(self, start_index=0) -> None:
         for category in self.categories:
-            self.api.get_players_related_games(self.game_id, category.id)
+            self.api.get_players_related_games(self.game_id, category.id, start_index)
 
 class WorldRecordHistoryCollector:
     def __init__(self, name: str) -> None:
@@ -26,9 +35,9 @@ class WorldRecordHistoryCollector:
         self.game_id = base.get_game_id(name)
         self.categories = base.get_game(self.game_id).categories
 
-    def run(self) -> None:
+    def run(self, start_date=None, end_date=FINAL_DATE) -> None:
         for category in self.categories:
-            self.api.record_history_game_category(self.game_id, category.id)
+            self.api.record_history_game_category(self.game_id, category.id, start_date, end_date)
 
 class Collector:
     def __init__(self, base: collector_base.CollectorBase, filename: str) -> None:
@@ -70,7 +79,7 @@ class Collector:
 
                 current_date += timedelta(weeks=1)
 
-    def get_players_related_games(self, game_id: str, category_id: str) -> None:
+    def get_players_related_games(self, game_id: str, category_id: str, start_index=0) -> None:
         original_game = self.base.get_game(game_id)
         category = self.base.get_category(original_game, category_id)
         runs = self.base.get_leaderboard(original_game.id, category.id, FINAL_DATE).data["runs"]
@@ -86,16 +95,31 @@ class Collector:
                 user_id = user.get("id")
                 if user_id == None:
                     break
+
                 user_ids.append(user_id)
 
         with open(self.filename, 'a') as openfile:
             openfile.write(f"HEADER\ngame={original_game.name},number={len(user_ids)}\nDATA\n")
             openfile.write("user_id,game_id,game_name,category_id,category_name,position\n")
 
-            for user_id in user_ids:
+            for index, user_id in enumerate(user_ids[start_index:]):
+
+                print(f"total={len(user_ids)},num={index+start_index},user={user_id}")
+
                 pb_uri = self.base.get_user(user_id).data["links"][3]["uri"]
                 pb_response = requests.get(pb_uri)
-                user_runs = pb_response.json()["data"]
+
+                # 420 is the response code if you hit the request limit.
+                # If user_runs is none, then something fucked up has happened outside our control.
+                if pb_response.status_code == 420:
+                    print(f"err='hit request limit. Sleeping for 2, then requesting again...'")
+                    time.sleep(2)
+                    pb_response = requests.get(pb_uri)
+
+                user_runs = pb_response.json().get("data")
+                if user_runs == None:
+                    print(f"err='could not get data field',time={time.ctime()},res={pb_response}")
+
                 for run in user_runs:
                     position = run["place"]
                     game_id = run["run"]["game"]
@@ -106,3 +130,6 @@ class Collector:
 
                     openfile.write(f"{user_id},{game_id},{game.name},{category_id},{category_name},{position}\n")
 
+
+    def get_game_information(self) -> None:
+        pass
