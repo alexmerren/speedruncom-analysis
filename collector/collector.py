@@ -1,19 +1,18 @@
 import requests
 import time 
 
+from srcomapi import srcomapi
 from . import collector_base 
 from datetime import timedelta, datetime
 
 FINAL_DATE = datetime(2023, 1, 1)
 
-class GameInfoCollector:
-    def __init__(self, name) -> None:
-        base = collector_base.CollectorBase(debug=1)
-        name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/game_info/{name}.csv")
+class GameInformationCollector:
+    def __init__(self) -> None:
+        pass
 
     def run(self) -> None:
-        self.api.get_game_information()
+        pass
 
 class RelatedGamesCollector:
     def __init__(self, name: str) -> None:
@@ -21,11 +20,9 @@ class RelatedGamesCollector:
         name = name.replace(" ", "_", -1).lower()
         self.api = Collector(base, f"data/related_games/{name}.csv")
         self.game_id = base.get_game_id(name)
-        self.categories = base.get_game(self.game_id).categories
 
     def run(self, start_index=0) -> None:
-        for category in self.categories:
-            self.api.get_players_related_games(self.game_id, category.id, start_index)
+        self.api.get_players_related_games(self.game_id, start_index)
 
 class WorldRecordHistoryCollector:
     def __init__(self, name: str) -> None:
@@ -79,57 +76,84 @@ class Collector:
 
                 current_date += timedelta(weeks=1)
 
-    def get_players_related_games(self, game_id: str, category_id: str, start_index=0) -> None:
-        original_game = self.base.get_game(game_id)
-        category = self.base.get_category(original_game, category_id)
-        runs = self.base.get_leaderboard(original_game.id, category.id, FINAL_DATE).data["runs"]
+    def get_players_for_game(self, game_id: str) -> list[str]:
+        game = self.base.get_game(game_id)
+        runs_uri = game.data.get("links")[1].get("uri")
+        max_runs = 200
 
-        players = []
-        for run in runs:
-            players.append(run["run"]["players"])
+        player_ids = set()
 
-        user_ids = []
-        for entry in players:
-            for user in entry:
+        for category in game.categories:
+            verified_runs_uri = f"{runs_uri}&category={category.id}&max={max_runs}&status=verified&orderby=date&direction=asc"
+            more_pages = True
 
-                user_id = user.get("id")
-                if user_id == None:
-                    break
+            while more_pages:
+                print(verified_runs_uri)
+                response = requests.get(verified_runs_uri)
 
-                user_ids.append(user_id)
+                if response.status_code == 420:
+                    time.sleep(2)
+                    print("420: request limit hit, sleeping for 2s...")
+                    response = requests.get(verified_runs_uri)
+                if response.status_code == 404:
+                    print("404: something went wrong, exiting...")
+                    print(response.json())
+
+                response_data = response.json()
+                for runs in response_data.get("data"):
+                    for player in runs.get("players"):
+                        player_id = player.get("id")
+                        if player_id == None:
+                            break
+                
+                        player_ids.add(player_id)
+                
+                if response_data.get("pagination").get("size") < max_runs:
+                    more_pages = False
+
+                for link in response_data.get("pagination")["links"]:
+                    if link["rel"] == "next":
+                        verified_runs_uri = link["uri"]
+        print(len(player_ids))
+        return list(player_ids)
+
+    def get_players_related_games(self, game_id: str, start_index=0) -> None:
+        game = self.base.get_game(game_id)
+        player_ids = self.get_players_for_game(game_id)
+        all_player_ids_length = len(player_ids)
 
         with open(self.filename, 'a') as openfile:
-            openfile.write(f"HEADER\ngame={original_game.name},number={len(user_ids)}\nDATA\n")
-            openfile.write("user_id,game_id,game_name,category_id,category_name,position\n")
-
-            for index, user_id in enumerate(user_ids[start_index:]):
-
-                print(f"total={len(user_ids)},num={index+start_index},user={user_id}")
-
+            openfile.write(f"HEADER\ngame={game.name},number={all_player_ids_length}\nDATA\n")
+            openfile.write("user_id,game_id,game_name,category_id,category_name,level_id,level_name,position\n")
+        
+            for index, user_id in enumerate(player_ids[start_index:]):
+        
+                print(f"total={all_player_ids_length},num={index+start_index},user={user_id}")
+        
                 pb_uri = self.base.get_user(user_id).data["links"][3]["uri"]
                 pb_response = requests.get(pb_uri)
-
+        
                 # 420 is the response code if you hit the request limit.
                 # If user_runs is none, then something fucked up has happened outside our control.
                 if pb_response.status_code == 420:
                     print(f"err='hit request limit. Sleeping for 2, then requesting again...'")
                     time.sleep(2)
                     pb_response = requests.get(pb_uri)
-
+        
                 user_runs = pb_response.json().get("data")
                 if user_runs == None:
                     print(f"err='could not get data field',time={time.ctime()},res={pb_response}")
-
+        
                 for run in user_runs:
                     position = run["place"]
                     game_id = run["run"]["game"]
                     category_id = run["run"]["category"]
-
+                    level_id = run["run"]["level"]
+        
                     game = self.base.get_game(game_id)
                     category_name = self.base.get_category(game,category_id).name
-
-                    openfile.write(f"{user_id},{game_id},{game.name},{category_id},{category_name},{position}\n")
-
-
-    def get_game_information(self) -> None:
-        pass
+                    level_name = "None"
+                    if level_id != None:
+                        level_name = srcomapi.datatypes.Level(self.base.api, data=self.base.api.get("levels/{}".format(level_id))).data["name"]
+        
+                    openfile.write(f"{user_id},{game_id},{game.name},{category_id},{level_id},{level_name},{category_name},{position}\n")
