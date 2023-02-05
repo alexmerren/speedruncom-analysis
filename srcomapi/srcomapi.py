@@ -83,6 +83,9 @@ class SpeedrunCom(object):
                     data.extend(response.json()["data"])
             except KeyError:
                 pass
+            except:
+                print(response)
+                return None
         return data
 
     def get_game(self, id, **kwargs):

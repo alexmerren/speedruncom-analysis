@@ -26,3 +26,8 @@ the [data](/data) may be useful.
 A big thank you to [blha303](https://github.com/blha303) for creating the
 [srcomapi repository](https://github.com/blha303/srcomapi). It has saved me
 countless hours creating my own wrapper for the API, you have my thanks!
+
+## References
+
+ * [Srcomapi Repository](https://github.com/blha303/srcomapi)
+ * [Speedrun.com API reference](https://github.com/speedruncomorg)

@@ -1,5 +1,8 @@
 import srcomapi
-import psutil
+import requests
+import time
+
+REQUEST_LIMIT_SLEEP_TIME = 2
 
 class CollectorBase:
     def __init__(self, debug=0) -> None :
@@ -30,6 +33,9 @@ class CollectorBase:
                 return category
         return None
 
+    def get_level(self, level_id: str) -> srcomapi.datatypes.Level:
+        return srcomapi.datatypes.Level(self.api, data=self.api.get("levels/{}".format(level_id)))
+
     def get_user(self, user_id) -> srcomapi.datatypes.User:
         return self.api.get_user(user_id)
 
@@ -39,7 +45,18 @@ class CollectorBase:
     def get_top_of_leaderboard(self, game_id, category_id, date) -> srcomapi.datatypes.Leaderboard:
         return srcomapi.datatypes.Leaderboard(self.api, data=self.api.get("leaderboards/{}/category/{}?embed=variables&top=1&date={}".format(game_id, category_id, date.isoformat())))
 
-    def print_debug(self):
-        print(f"CPU: {psutil.cpu_percent()}%")
-        print(f"RAM: {psutil.virtual_memory()[3]/1000000000} GB")
+    def search(self):
+        pass
+
+    def get(self, uri: str):
+        response = requests.get(uri)
+        if response.status_code == 404:
+            print(f"404 (Not Found): Exiting, {response.json()=}")
+            return None
+        if response.status_code == 420:
+            print(f"420 (Request limit): Sleeping for {REQUEST_LIMIT_SLEEP_TIME}s, then requesting again.")
+            time.sleep(REQUEST_LIMIT_SLEEP_TIME)
+            response = requests.get(uri)
+
+        return response.json()
 
