@@ -7,6 +7,9 @@ from . import collector_base
 FINAL_DATE = datetime(2023, 1, 1)
 
 class GameInformationCollector:
+    """
+    A class designed to collect basic information for every game and write to csv.
+    """
     def __init__(self, name:str) -> None:
         base = collector_base.CollectorBase(debug=0)
         name = name.replace(" ", "_", -1).lower()
@@ -17,16 +20,23 @@ class GameInformationCollector:
         self.api.get_all_games_with_info(start_index)
 
 class RelatedGamesCollector:
-    def __init__(self, name: str) -> None:
+    """
+    DEPRECATED: Use collectorv2.
+    A class designed to collect all players' played games for every game.
+    """
+    def __init__(self) -> None:
         base = collector_base.CollectorBase(debug=0)
-        name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/related_games/{name}.csv")
-        self.game_id = base.get_game_id(name)
+        # This API does not need a name as it isn't writing to file.
+        self.api = Collector(base, "" ) 
 
-    def run(self, start_index=0) -> None:
-        self.api.get_players_related_games(self.game_id, start_index)
+    def run(self, game_start_index=0, player_start_index=0) -> None:
+        self.api.get_players_related_games_for_all_games(game_start_index, player_start_index)
 
 class WorldRecordHistoryCollector:
+    """
+    A class designed to collect world record history for every game from it's
+    release date to the cutoff date
+    """
     def __init__(self, name: str) -> None:
         base = collector_base.CollectorBase(debug=1)
         name = name.replace(" ", "_", -1).lower()
@@ -44,6 +54,10 @@ class Collector:
         self.filename = filename
 
     def record_history_game_category(self, game_id: str, category_id: str, start_date=None, end_date=FINAL_DATE) -> None:
+        """
+        Get the record history from release until cutoff date for a category of
+        a game.
+        """
         game = self.base.get_game(game_id)
         category = self.base.get_category(game, category_id)
 
@@ -78,7 +92,10 @@ class Collector:
 
                 current_date += timedelta(weeks=1)
 
-    def get_players_for_game(self, game_id: str) -> list[str]:
+    def get_player_ids_for_game(self, game_id: str) -> list[str]:
+        """
+        Get a list of player ids that have submitted a run for a game.
+        """
         game = self.base.get_game(game_id)
         runs_uri = game.data.get("links")[1]["uri"]
         max_runs = 200
@@ -118,6 +135,8 @@ class Collector:
 
     def get_number_of_players_for_game(self, game_id: str) -> int:
         """
+        Get the NUMBER of player ids that have submitted a run for a game.
+
         For this function, we have a couple of specific return states:
         -999: This will return if we have too many runs so that we go past the pagination limit.
         -1: If there's a general error so we will have to re run for this given game.
@@ -155,13 +174,31 @@ class Collector:
 
         return number
 
-    def get_players_related_games(self, game_id: str, start_index=0) -> None:
+    def get_players_related_games_for_all_games(self, game_start_index=0, player_start_index=0) -> None:
+        """
+        Get all the games that a player has submitted runs for for every game.
+        """
+        all_game_ids = self.get_all_games()
+        total_len = len(all_game_ids)
+        print(total_len)
+
+        for index, game_id in enumerate(all_game_ids[game_start_index:]):
+            print(f"index={game_start_index+index},len={total_len},{game_id=}")
+            game_name = self.base.get_game(game_id).name
+            game_name = game_name.replace(" ", "_", -1).lower()
+            writeApi = Collector(self.base, f"data/related_games/{game_name}.csv")
+            writeApi.get_players_related_games_for_game(game_id, player_start_index)
+
+
+    def get_players_related_games_for_game(self, game_id: str, start_index=0) -> None:
+        """
+        Get all the games that a player has submitted runs for for a single game.
+        """
         game = self.base.get_game(game_id)
-        player_ids = self.get_players_for_game(game_id)
+        player_ids = self.get_player_ids_for_game(game_id)
         all_player_ids_length = len(player_ids)
 
         with open(self.filename, 'a') as openfile:
-            openfile.write(f"HEADER\ngame={game.name},number={all_player_ids_length}\nDATA\n")
             openfile.write("user_id,game_id,game_name,category_id,category_name,level_id,level_name,position\n")
         
             for index, user_id in enumerate(player_ids[start_index:]):
@@ -176,6 +213,7 @@ class Collector:
                 user_runs = response_data.get("data")
                 if user_runs == None:
                     print(f"user_runs is None,{time.ctime()=},{response_data=}")
+                    return
         
                 for run in user_runs:
                     position = run["place"]
@@ -187,11 +225,14 @@ class Collector:
                     category_name = self.base.get_category(game,category_id).name
                     level_name = "None"
                     if level_id != None:
-                        level_name = self.base.get_level(level_id)
+                        level_name = self.base.get_level(level_id).name
         
                     openfile.write(f"{user_id},{game_id},{game.name},{category_id},{level_id},{level_name},{category_name},{position}\n")
 
     def get_all_games(self) -> list[str]:
+        """
+        Get a time-ordered (ascending) list of game id's for every game.
+        """
         bulk_game_uri = "https://www.speedrun.com/api/v1/games?_bulk=yes&max=1000&orderby=released&direction=asc"
         max_games = 1000
         game_ids = []
@@ -217,6 +258,10 @@ class Collector:
         return game_ids
 
     def get_all_games_with_info(self, start_index=0):
+        """
+        Get basic information about a game like release date and number of runs
+        for a game.
+        """
         game_ids = self.get_all_games()
 
         with open(self.filename, 'a') as openfile:

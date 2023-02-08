@@ -1,4 +1,5 @@
 import requests
+import requests_cache
 from http.client import responses
 from os.path import dirname
 from os import environ
@@ -12,6 +13,9 @@ from .exceptions import APIRequestException, APINotProvidedException
 # libraries for mocking
 import json
 import gzip
+
+REQUEST_CACHE_NAME = "srcom_requests_cache"
+requests_cache.install_cache(REQUEST_CACHE_NAME, allowable_methods=['GET'], allowable_codes=[200])
 
 with open(dirname(srcomapi.__file__) + "/.version") as f:
     __version__ = f.read().strip()

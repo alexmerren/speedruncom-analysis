@@ -11,10 +11,12 @@ clustering and regerssion techniques to complete further analysis.
 ## How does this work?
 
 This repository is split into four logical directories:
-* [Data Collector](/collector) - Code using srcomapi for requests, and custom formatting into the data repository.
 * [Data](/data) - The repository of all the formatted data that I have collected.
-* [Speedrun.com API](/srcomapi) - A wrapper for the speedrun.com API created by [blha303](https://github.com/blha303).
 * [Analysing](/notebook) - A repository for the Jupyter Notebooks or other analysis programs.
+* [Data Collector](/collector) - Code using srcomapi for requests, and custom formatting into the data repository.
+* [Data Collector v2](/collectorv2) - My attempt at making a custom collector. Work in progress.
+* [Speedrun.com API Module](/srcomapi) - A wrapper for the speedrun.com API created by [blha303](https://github.com/blha303).
+* [Request Caching Module](/requests_cache) - A request cache module created by [requests-cache](https://github.com/requests-cache).
 
 ## Usage
 
@@ -29,5 +31,6 @@ countless hours creating my own wrapper for the API, you have my thanks!
 
 ## References
 
- * [Srcomapi Repository](https://github.com/blha303/srcomapi)
+ * [Srcomapi repository](https://github.com/blha303/srcomapi)
  * [Speedrun.com API reference](https://github.com/speedruncomorg)
+ * [Request-cache repository](https://github.com/requests-cache/requests-cache)
