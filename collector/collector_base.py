@@ -1,8 +1,15 @@
 import srcomapi
-import requests
 import time
 
-REQUEST_LIMIT_SLEEP_TIME = 2
+from requests_cache import CachedSession
+
+REQUEST_CACHE_NAME = "collector_requests_cache"
+REQUEST_TIMEOUT_SLEEP = 2
+
+requests_c = CachedSession(
+        REQUEST_CACHE_NAME, 
+        backend='sqlite',
+        expire_after=None)
 
 class CollectorBase:
     def __init__(self, debug=0) -> None :
@@ -49,14 +56,17 @@ class CollectorBase:
         pass
 
     def get(self, uri: str):
-        response = requests.get(uri)
-        if response.status_code == 404:
-            print(f"404 (Not Found): Exiting, {response.json()=}")
+        response = requests_c.get(uri)
+        if response.status_code in [404,400]:
+            print(f"({response.status_code}) {response.reason}: Exiting. {response.json()=}")
             return None
-        if response.status_code == 420:
-            print(f"420 (Request limit): Sleeping for {REQUEST_LIMIT_SLEEP_TIME}s, then requesting again.")
-            time.sleep(REQUEST_LIMIT_SLEEP_TIME)
-            response = requests.get(uri)
-
-        return response.json()
-
+        if response.status_code in [420,504]:
+            print(f"({response.status_code}) {response.reason}: re-requesting.")
+            time.sleep(REQUEST_TIMEOUT_SLEEP)
+            return self.get(uri)
+        try:
+            return response.json()
+        except: 
+            print(f"({response.status_code}) {response.reason}: re-requesting")
+            time.sleep(REQUEST_TIMEOUT_SLEEP)
+            return self.get(uri)

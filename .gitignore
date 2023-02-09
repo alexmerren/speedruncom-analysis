@@ -132,3 +132,4 @@ bin/
 pyvenv.cfg
 
 .DS_Store
+*.sqlite
