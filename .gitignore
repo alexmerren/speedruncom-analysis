@@ -133,3 +133,5 @@ pyvenv.cfg
 
 .DS_Store
 *.sqlite
+lib64/
+lib64
