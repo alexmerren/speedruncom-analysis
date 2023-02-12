@@ -6,6 +6,18 @@ from . import collector_base
 
 FINAL_DATE = datetime(2023, 1, 1)
 
+class CollatedRelatedGamesCollector:
+    """
+    A class to collate all the information about related games and expand upon just the ID's.
+    """
+    def __init__(self, name:str, debug=0) -> None:
+        base = collector_base.CollectorBase(debug=debug)
+        name = name.replace(" ", "_", -1).lower()
+        self.api = Collector(base, f"data/related_games/{name}.csv")
+
+    def run(self, game_start_index=0, player_start_index=0) -> None:
+        self.api.get_expanded_player_related_games_for_all_games(game_start_index, player_start_index)
+
 class GameInformationCollector:
     """
     A class designed to collect basic information for every game and write to csv.
@@ -192,6 +204,15 @@ class Collector:
             writeApi = Collector(self.base, f"data/related_games/{index+game_start_index:05}_{game_name}.csv", debug=1)
             writeApi.get_players_related_games_for_game(game_id, player_start_index)
             player_start_index = 0
+    
+    def get_expanded_player_related_games_for_all_games(self, game_start_index=0, player_start_index=0) -> None:
+        all_game_ids = self.get_all_games()
+        total_len = len(all_game_ids)
+        if self.debug >= 1: print(total_len)
+        for index, game_id in enumerate(all_game_ids[game_start_index:]):
+            if self.debug >= 1: print(f"game_index={game_start_index+index},total={total_len},{game_id=}")
+            self.get_expanded_players_related_games_for_game(game_id, player_start_index)
+            player_start_index = 0
 
 
     def get_players_related_games_for_game(self, game_id: str, start_index=0) -> None:
@@ -203,7 +224,7 @@ class Collector:
         all_player_ids_length = len(player_ids)
 
         with open(self.filename, 'a') as openfile:
-            openfile.write("user_id,game_id,category_id,level_id,position\n")
+            openfile.write("original_game_id,user_id,game_id,category_id,level_id,position\n")
         
             for index, user_id in enumerate(player_ids[start_index:]):
         
@@ -226,6 +247,43 @@ class Collector:
                     level_id = run["run"]["level"]
         
                     openfile.write(f"{original_game_id},{user_id},{game_id},{category_id},{level_id},{position}\n")
+
+    def get_expanded_players_related_games_for_game(self, game_id: str, start_index=0) -> None:
+        original_game_id = game_id
+        original_game_name = self.base.get_game(game_id).name
+        player_ids = self.get_player_ids_for_game(game_id)
+        all_player_ids_length = len(player_ids)
+
+        with open(self.filename, 'a') as openfile:
+            openfile.write(f"original_game_id,original_game_name,user_id,user_location,game_id,game_name,category_id,category_name,level_id,level_name,position\n")
+        
+            for index, user_id in enumerate(player_ids[start_index:]):
+        
+                if self.debug >= 1: print(f"user_index={index+start_index},total={all_player_ids_length},{user_id=}")
+        
+                pb_uri = self.base.get_user(user_id).data["links"][3]["uri"]
+                response_data = self.base.get(pb_uri)
+                if response_data == None:
+                    return
+        
+                user_runs = response_data.get("data")
+                if user_runs == None:
+                    if self.debug >= 1: print(f"user_runs is None,{time.ctime()=},{response_data=}")
+                    return
+        
+                for run in user_runs:
+                    position = run["place"]
+                    game_id = run["run"]["game"]
+                    category_id = run["run"]["category"]
+                    level_id = run["run"]["level"]
+
+                    user_location = self.base.get_user(user_id).data["location"]["country"]["names"]["international"]
+                    game = self.base.get_game(game_id)
+                    game_name = game.data["names"]["international"]
+                    category_name = self.base.get_category(game,category_id).data["name"]
+                    level_name = self.base.get_level(level_id).data["name"]
+        
+                    openfile.write(f"{original_game_id},{original_game_name},{user_id},{user_location},{game_id},{game_name},{category_id},{category_name},{level_id},{level_name},{position}\n")
 
     def get_all_games(self) -> list[str]:
         """
