@@ -41,7 +41,7 @@ class SpeedrunCom(object):
             headers["X-API-Key"] = self.api_key
         kwargs.update({"headers": headers})
         uri = API_URL + endpoint
-        #if self.debug >= 1: print(uri)
+        # if self.debug >= 1: print(uri)
         if self.mock:
             mock_endpoint = ".".join(endpoint.split("/")[0::2])
             try:
