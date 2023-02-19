@@ -1,4 +1,5 @@
 import time 
+import srcomapi
 
 from datetime import timedelta, datetime
 
@@ -12,11 +13,12 @@ class CollatedRelatedGamesCollector:
     """
     def __init__(self, name:str, debug=0) -> None:
         base = collector_base.CollectorBase(debug=debug)
+        self.debug = debug
         name = name.replace(" ", "_", -1).lower()
         self.api = Collector(base, f"data/related_games/{name}.csv")
 
-    def run(self, game_start_index=0, player_start_index=0) -> None:
-        self.api.get_expanded_player_related_games_for_all_games(game_start_index, player_start_index)
+    def run(self, game_start_index=0, user_start_index=0) -> None:
+        self.api.get_expanded_user_related_games_for_all_games(game_start_index, user_start_index)
 
 class GameInformationCollector:
     """
@@ -25,23 +27,22 @@ class GameInformationCollector:
     def __init__(self, name:str, debug=0) -> None:
         base = collector_base.CollectorBase(debug=debug)
         name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/games_information/{name}.csv")
-        self.game_id = base.get_game_id(name)
+        self.api = Collector(base, f"data/games_information/{name}.csv", debug=debug)
 
     def run(self, start_index=0) -> None:
         self.api.get_all_games_with_info(start_index)
 
-class RelatedGamesCollector:
+class IndividualRelatedGamesCollector:
     """
-    A class designed to collect all players' played games for every game.
+    A class designed to collect all users' played games for every game.
     """
-    def __init__(self) -> None:
-        base = collector_base.CollectorBase(debug=1)
-        # This API does not need a name as it isn't writing to file.
-        self.api = Collector(base, "", debug=1) 
+    def __init__(self, name: str, debug=0) -> None:
+        base = collector_base.CollectorBase(debug=debug)
+        self.debug = debug
+        self.api = Collector(base, f"data/related_games/{name}.csv", debug=debug) 
 
-    def run(self, game_start_index=0, player_start_index=0) -> None:
-        self.api.get_players_related_games_for_all_games(game_start_index, player_start_index)
+    def run(self, game_id:str, user_start_index=0) -> None:
+        self.api.get_users_related_games_for_game(game_id, user_start_index)
 
 class WorldRecordHistoryCollector:
     """
@@ -108,15 +109,15 @@ class Collector:
 
                 current_date += timedelta(weeks=1)
 
-    def get_player_ids_for_game(self, game_id: str) -> list[str]:
+    def get_user_ids_for_game(self, game_id: str) -> list[str]:
         """
-        Get a list of player ids that have submitted a run for a game.
+        Get a list of user ids that have submitted a run for a game.
         """
         game = self.base.get_game(game_id)
         runs_uri = game.data["links"][1]["uri"]
         max_runs = 200
 
-        player_ids = set()
+        user_ids = set()
 
         for category in game.categories:
             verified_runs_uri = f"{runs_uri}&category={category.id}&max={max_runs}&status=verified&orderby=date&direction=asc"
@@ -130,11 +131,11 @@ class Collector:
 
                 for runs in response_data.get("data"):
                     for player in runs.get("players"):
-                        player_id = player.get("id")
-                        if player_id == None:
+                        user_id = player.get("id")
+                        if user_id == None:
                             break
                 
-                        player_ids.add(player_id)
+                        user_ids.add(user_id)
                 
                 if response_data.get("pagination").get("size") < max_runs:
                     more_pages = False
@@ -143,11 +144,33 @@ class Collector:
                     if link["rel"] == "next":
                         verified_runs_uri = link["uri"]
 
-        return list(player_ids)
+        return list(user_ids)
 
-    def get_number_of_players_for_game(self, game_id: str) -> int:
+    def get_user_ids_for_game_v2(self, game_id: str) -> list[str]:
+        user_ids = set()
+        game = self.base.get_game(game_id)
+        for category in game.categories:
+            if category.type == 'per-level':
+                for level in game.levels:
+                    leaderboard = srcomapi.datatypes.Leaderboard(self.base.api, data=self.base.api.get("leaderboards/{}/level/{}/{}?embed=variables".format(game.id, level.id, category.id)))
+                    for run in leaderboard.runs:
+                        users = run["run"].data["players"]
+                        for user in users:
+                            if user["rel"] == "user":
+                                user_ids.add(user['id'])
+            else:
+                leaderboard = srcomapi.datatypes.Leaderboard(self.base.api, data=self.base.api.get("leaderboards/{}/category/{}?embed=variables".format(game.id, category.id)))
+                for run in leaderboard.runs:
+                    users = run["run"].data["players"]
+                    for user in users:
+                        if user["rel"] == "user":
+                            user_ids.add(user['id'])
+
+        return list(user_ids)
+
+    def get_number_of_users_for_game(self, game_id: str) -> int:
         """
-        Get the NUMBER of player ids that have submitted a run for a game.
+        Get the NUMBER of user ids that have submitted a run for a game.
 
         For this function, we have a couple of specific return states:
         -999: This will return if we have too many runs so that we go past the pagination limit.
@@ -189,9 +212,35 @@ class Collector:
 
         return number
 
-    def get_players_related_games_for_all_games(self, game_start_index=0, player_start_index=0) -> None:
+    def get_number_of_users_for_game_v2(self, game_id: str) -> tuple[int, int]:
+        user_numbers, guest_numbers = 0, 0
+        game = self.base.get_game(game_id)
+        for category in game.categories:
+            if category.type == 'per-level':
+                for level in game.levels:
+                    leaderboard = srcomapi.datatypes.Leaderboard(self.base.api, data=self.base.api.get("leaderboards/{}/level/{}/{}?embed=variables".format(game.id, level.id, category.id)))
+                    for run in leaderboard.runs:
+                        users = run["run"].data["players"]
+                        for user in users:
+                            if user["rel"] == "user":
+                                user_numbers += 1
+                            else:
+                                guest_numbers += 1
+            else:
+                leaderboard = srcomapi.datatypes.Leaderboard(self.base.api, data=self.base.api.get("leaderboards/{}/category/{}?embed=variables".format(game.id, category.id)))
+                for run in leaderboard.runs:
+                    users = run["run"].data["players"]
+                    for user in users:
+                        if user["rel"] == "user":
+                            user_numbers += 1
+                        else:
+                            guest_numbers += 1
+
+        return (user_numbers, guest_numbers)
+
+    def get_users_related_games_for_all_games(self, game_start_index=0, user_start_index=0) -> None:
         """
-        Get all the games that a player has submitted runs for for every game.
+        Get all the games that a user has submitted runs for for every game.
         """
         all_game_ids = self.get_all_games()
         total_len = len(all_game_ids)
@@ -202,33 +251,33 @@ class Collector:
             game_name = self.base.get_game(game_id).name
             game_name = game_name.replace(" ", "_", -1).replace("/", '_', -1).lower()
             writeApi = Collector(self.base, f"data/related_games/{index+game_start_index:05}_{game_name}.csv", debug=1)
-            writeApi.get_players_related_games_for_game(game_id, player_start_index)
-            player_start_index = 0
+            writeApi.get_users_related_games_for_game(game_id, user_start_index)
+            user_start_index = 0
     
-    def get_expanded_player_related_games_for_all_games(self, game_start_index=0, player_start_index=0) -> None:
+    def get_expanded_user_related_games_for_all_games(self, game_start_index=0, user_start_index=0) -> None:
         all_game_ids = self.get_all_games()
         total_len = len(all_game_ids)
         if self.debug >= 1: print(total_len)
         for index, game_id in enumerate(all_game_ids[game_start_index:]):
             if self.debug >= 1: print(f"game_index={game_start_index+index},total={total_len},{game_id=}")
-            self.get_expanded_players_related_games_for_game(game_id, player_start_index)
-            player_start_index = 0
+            self.get_expanded_users_related_games_for_game(game_id, user_start_index)
+            user_start_index = 0
 
 
-    def get_players_related_games_for_game(self, game_id: str, start_index=0) -> None:
+    def get_users_related_games_for_game(self, game_id: str, start_index=0) -> None:
         """
-        Get all the games that a player has submitted runs for for a single game.
+        Get all the games that a user has submitted runs for for a single game.
         """
         original_game_id = game_id
-        player_ids = self.get_player_ids_for_game(game_id)
-        all_player_ids_length = len(player_ids)
+        user_ids = self.get_user_ids_for_game_v2(game_id)
+        all_user_ids_length = len(user_ids)
 
         with open(self.filename, 'a') as openfile:
             openfile.write("original_game_id,user_id,game_id,category_id,level_id,position\n")
         
-            for index, user_id in enumerate(player_ids[start_index:]):
+            for index, user_id in enumerate(user_ids[start_index:]):
         
-                if self.debug >= 1: print(f"user_index={index+start_index},total={all_player_ids_length},{user_id=}")
+                if self.debug >= 1: print(f"user_index={index+start_index},total={all_user_ids_length},{user_id=}")
         
                 pb_uri = self.base.get_user(user_id).data["links"][3]["uri"]
                 response_data = self.base.get(pb_uri)
@@ -248,18 +297,18 @@ class Collector:
         
                     openfile.write(f"{original_game_id},{user_id},{game_id},{category_id},{level_id},{position}\n")
 
-    def get_expanded_players_related_games_for_game(self, game_id: str, start_index=0) -> None:
+    def get_expanded_users_related_games_for_game(self, game_id: str, start_index=0) -> None:
         original_game_id = game_id
         original_game_name = self.base.get_game(game_id).name
-        player_ids = self.get_player_ids_for_game(game_id)
-        all_player_ids_length = len(player_ids)
+        user_ids = self.get_user_ids_for_game(game_id)
+        all_user_ids_length = len(user_ids)
 
         with open(self.filename, 'a') as openfile:
             openfile.write(f"original_game_id,original_game_name,user_id,user_location,game_id,game_name,category_id,category_name,level_id,level_name,position\n")
         
-            for index, user_id in enumerate(player_ids[start_index:]):
+            for index, user_id in enumerate(user_ids[start_index:]):
         
-                if self.debug >= 1: print(f"user_index={index+start_index},total={all_player_ids_length},{user_id=}")
+                if self.debug >= 1: print(f"user_index={index+start_index},total={all_user_ids_length},{user_id=}")
         
                 pb_uri = self.base.get_user(user_id).data["links"][3]["uri"]
                 response_data = self.base.get(pb_uri)
@@ -319,15 +368,16 @@ class Collector:
         for a game.
         """
         game_ids = self.get_all_games()
+        if self.debug >= 1: print(len(game_ids))
 
         with open(self.filename, 'a') as openfile:
-            openfile.write("game_id,game_name,release_date,created_date,num_runs\n")
+            openfile.write("game_id,game_name,release_date,created_date,num_users,num_guests\n")
 
             for index, game_id in enumerate(game_ids[start_index:]):
-                if self.debug >= 1: print(f"index={index+start_index},{game_id=}")
+                if self.debug >= 1: print(f"index={index+start_index},len={len(game_ids)},{game_id=}")
                 game = self.base.get_game(game_id)
                 game_name = game.name
                 release_date = game.release_date
                 created_date = game.created
-                num_runs = self.get_number_of_players_for_game(game_id)
-                openfile.write(f"{game_id},{game_name},{release_date},{created_date},{num_runs}\n")
+                num_users, num_guests = self.get_number_of_users_for_game_v2(game_id)
+                openfile.write(f"{game_id},{game_name},{release_date},{created_date},{num_users},{num_guests}\n")
