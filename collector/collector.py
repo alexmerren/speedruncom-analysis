@@ -134,29 +134,63 @@ class Collector:
     def get_number_of_runs_users_guests_for_game(self, game_id: str) -> tuple[int, int, int]:
         user_ids, guest_ids = set(), set()
         num_runs = 0
+        max_runs_pagination = 200
         game = self.base.get_game(game_id)
+
         for category in game.categories:
             if category.type == 'per-level':
                 for level in game.levels:
-                    leaderboard = srcomapi.datatypes.Leaderboard(self.base.api, data=self.base.api.get("leaderboards/{}/level/{}/{}?embed=variables".format(game.id, level.id, category.id)))
-                    for run in leaderboard.runs:
+
+                    more_pages = True
+                    runs_game_category_level_uri = f"{game.data['links'][1]['uri']}&category={category.id}&level={level.id}&status=verified&max={max_runs_pagination}"
+                    while more_pages:
+                        response = self.base.get(runs_game_category_level_uri)
+                        if response == None:
+                            return (-999,-999,-999)
+
+                        response_data = response.get("data")
+
+                        for run in response_data:
+                            num_runs += 1
+                            users = run["players"]
+                            for user in users:
+                                if user["rel"] == "user":
+                                    user_ids.add(user['id'])
+                                else:
+                                    guest_ids.add(user['name'])
+
+                        if response.get("pagination").get("size") < max_runs_pagination:
+                            more_pages = False
+
+                        for link in response.get("pagination")["links"]:
+                            if link["rel"] == "next":
+                                runs_game_category_level_uri = link["uri"]
+
+            else:
+                more_pages = True
+                runs_game_category_uri = f"{game.data['links'][1]['uri']}&category={category.id}&status=verified&max={max_runs_pagination}"
+                while more_pages:
+                    response = self.base.get(runs_game_category_uri)
+                    if response == None:
+                        return (-999,-999,-999)
+
+                    response_data = response.get("data")
+
+                    for run in response_data:
                         num_runs += 1
-                        users = run["run"].data["players"]
+                        users = run["players"]
                         for user in users:
                             if user["rel"] == "user":
                                 user_ids.add(user['id'])
                             else:
                                 guest_ids.add(user['name'])
-            else:
-                leaderboard = srcomapi.datatypes.Leaderboard(self.base.api, data=self.base.api.get("leaderboards/{}/category/{}?embed=variables".format(game.id, category.id)))
-                for run in leaderboard.runs:
-                    num_runs += 1
-                    users = run["run"].data["players"]
-                    for user in users:
-                        if user["rel"] == "user":
-                            user_ids.add(user['id'])
-                        else:
-                            guest_ids.add(user['name'])
+
+                    if response.get("pagination").get("size") < max_runs_pagination:
+                        more_pages = False
+
+                    for link in response.get("pagination")["links"]:
+                        if link["rel"] == "next":
+                            runs_game_category_uri = link["uri"]
                                 
         return (num_runs, len(user_ids), len(guest_ids))
 
