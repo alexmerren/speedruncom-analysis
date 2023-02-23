@@ -1,0 +1,371 @@
+game_name,game_id,category_name,category_id,level_id,date,user_id,run_id,time
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-04-21T00:00:00,8d4d3nl8,zx74gdgy,6837.36
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-04-28T00:00:00,68w7lmzx,z0p5r1jy,2268.616
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-05-05T00:00:00,8wlln1lj,zgpvk9jz,1869.96
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-05-12T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-05-19T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-05-26T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-06-02T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-06-09T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-06-16T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-06-23T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-06-30T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-07-07T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-07-14T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-07-21T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-07-28T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-08-04T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-08-11T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-08-18T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-08-25T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-09-01T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-09-08T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-09-15T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-09-22T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-09-29T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-10-06T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-10-13T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-10-20T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-10-27T00:00:00,86350ow8,yop94q1m,1466.5
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-11-03T00:00:00,j0v3934x,z5xn5kgy,1455.35
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-11-10T00:00:00,86350ow8,y8xldexm,1449.9
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-11-17T00:00:00,86350ow8,y8xldexm,1449.9
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-11-24T00:00:00,86350ow8,y8xldexm,1449.9
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-12-01T00:00:00,86350ow8,y8xldexm,1449.9
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-12-08T00:00:00,86350ow8,y8xldexm,1449.9
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-12-15T00:00:00,86350ow8,y8xldexm,1449.9
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-12-22T00:00:00,86350ow8,zg2714ny,1447.56
+RUN: The world in-between,y655qk46,Normal Any%,vdoyj092,None,2022-12-29T00:00:00,86350ow8,zg2714ny,1447.56
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-04-21T00:00:00,86350ow8,yop4xqjm,16081.652
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-04-28T00:00:00,86350ow8,zx7261ky,1744.21
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-05-05T00:00:00,86350ow8,zx7261ky,1744.21
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-05-12T00:00:00,86350ow8,y4qen4nm,1626.85
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-05-19T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-05-26T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-06-02T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-06-09T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-06-16T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-06-23T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-06-30T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-07-07T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-07-14T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-07-21T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-07-28T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-08-04T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-08-11T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-08-18T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-08-25T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-09-01T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-09-08T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-09-15T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-09-22T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-09-29T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-10-06T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-10-13T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-10-20T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-10-27T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-11-03T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-11-10T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-11-17T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-11-24T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-12-01T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-12-08T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-12-15T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-12-22T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Brutal Any%,wk639jpk,None,2022-12-29T00:00:00,86350ow8,zq71321m,1613.81
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-04-21T00:00:00,86350ow8,zp9qxorm,129272.987
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-04-28T00:00:00,86350ow8,y2p5vn5z,1917.19
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-05-05T00:00:00,86350ow8,y2p5vn5z,1917.19
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-05-12T00:00:00,86350ow8,zp9loj8m,1871.72
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-05-19T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-05-26T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-06-02T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-06-09T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-06-16T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-06-23T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-06-30T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-07-07T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-07-14T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-07-21T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-07-28T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-08-04T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-08-11T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-08-18T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-08-25T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-09-01T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-09-08T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-09-15T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-09-22T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-09-29T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-10-06T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-10-13T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-10-20T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-10-27T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-11-03T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-11-10T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-11-17T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-11-24T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-12-01T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-12-08T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-12-15T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-12-22T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Infernal Any%,7kj9xrz2,None,2022-12-29T00:00:00,86350ow8,me378g2z,1839.24
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-04-21T00:00:00,86350ow8,yvrgx7ez,348724.875
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-04-28T00:00:00,86350ow8,yjpl1edy,3742.23
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-05-05T00:00:00,86350ow8,yjpl1edy,3742.23
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-05-12T00:00:00,86350ow8,zx76qlgy,2853.14
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-05-19T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-05-26T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-06-02T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-06-09T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-06-16T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-06-23T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-06-30T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-07-07T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-07-14T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-07-21T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-07-28T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-08-04T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-08-11T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-08-18T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-08-25T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-09-01T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-09-08T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-09-15T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-09-22T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-09-29T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-10-06T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-10-13T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-10-20T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-10-27T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-11-03T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-11-10T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-11-17T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-11-24T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-12-01T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-12-08T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-12-15T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-12-22T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Nightmare Any%,z27vn7o2,None,2022-12-29T00:00:00,86350ow8,y9v9xorm,2294.02
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-04-21T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-04-28T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-05-05T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-05-12T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-05-19T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-05-26T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-06-02T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-06-09T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-06-16T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-06-23T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-06-30T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-07-07T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-07-14T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-07-21T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-07-28T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-08-04T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-08-11T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-08-18T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-08-25T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-09-01T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-09-08T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-09-15T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-09-22T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-09-29T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-10-06T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-10-13T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-10-20T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-10-27T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-11-03T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-11-10T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-11-17T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-11-24T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-12-01T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-12-08T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-12-15T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-12-22T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Full Game Any%,q251y4gd,None,2022-12-29T00:00:00,86350ow8,yddqlo0y,3096000
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-04-21T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-04-28T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-05-05T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-05-12T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-05-19T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-05-26T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-06-02T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-06-09T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-06-16T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-06-23T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-06-30T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-07-07T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-07-14T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-07-21T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-07-28T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-08-04T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-08-11T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-08-18T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-08-25T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-09-01T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-09-08T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-09-15T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-09-22T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-09-29T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-10-06T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-10-13T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-10-20T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-10-27T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-11-03T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-11-10T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-11-17T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-11-24T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-12-01T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-12-08T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-12-15T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-12-22T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Normal 100%,5dwnop0d,None,2022-12-29T00:00:00,86350ow8,y88qppny,8031.741
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-04-21T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-04-28T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-05-05T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-05-12T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-05-19T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-05-26T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-06-02T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-06-09T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-06-16T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-06-23T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-06-30T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-07-07T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-07-14T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-07-21T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-07-28T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-08-04T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-08-11T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-08-18T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-08-25T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-09-01T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-09-08T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-09-15T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-09-22T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-09-29T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-10-06T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-10-13T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-10-20T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-10-27T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-11-03T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-11-10T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-11-17T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-11-24T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-12-01T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-12-08T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-12-15T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-12-22T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Brutal 100%,n2ynw11k,None,2022-12-29T00:00:00,86350ow8,yw31xw9m,19436.52
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-04-21T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-04-28T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-05-05T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-05-12T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-05-19T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-05-26T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-06-02T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-06-09T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-06-16T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-06-23T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-06-30T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-07-07T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-07-14T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-07-21T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-07-28T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-08-04T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-08-11T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-08-18T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-08-25T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-09-01T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-09-08T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-09-15T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-09-22T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-09-29T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-10-06T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-10-13T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-10-20T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-10-27T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-11-03T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-11-10T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-11-17T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-11-24T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-12-01T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-12-08T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-12-15T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-12-22T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Infernal 100%,xk9xqlgk,None,2022-12-29T00:00:00,86350ow8,zq76qp8m,154881.593
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-04-21T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-04-28T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-05-05T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-05-12T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-05-19T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-05-26T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-06-02T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-06-09T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-06-16T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-06-23T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-06-30T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-07-07T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-07-14T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-07-21T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-07-28T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-08-04T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-08-11T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-08-18T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-08-25T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-09-01T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-09-08T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-09-15T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-09-22T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-09-29T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-10-06T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-10-13T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-10-20T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-10-27T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-11-03T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-11-10T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-11-17T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-11-24T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-12-01T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-12-08T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-12-15T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-12-22T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Nightmare 100%,zdny6qxk,None,2022-12-29T00:00:00,86350ow8,me3kgp8z,399579.108
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-04-21T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-04-28T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-05-05T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-05-12T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-05-19T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-05-26T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-06-02T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-06-09T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-06-16T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-06-23T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-06-30T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-07-07T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-07-14T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-07-21T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-07-28T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-08-04T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-08-11T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-08-18T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-08-25T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-09-01T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-09-08T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-09-15T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-09-22T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-09-29T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-10-06T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-10-13T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-10-20T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-10-27T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-11-03T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-11-10T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-11-17T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-11-24T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-12-01T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-12-08T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-12-15T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-12-22T00:00:00,86350ow8,mkk41r5m,3096000
+RUN: The world in-between,y655qk46,Full Game 100%,jdrnzplk,None,2022-12-29T00:00:00,86350ow8,mkk41r5m,3096000

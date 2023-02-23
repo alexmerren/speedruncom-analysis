@@ -1,24 +1,15 @@
 import time 
 import srcomapi
+import os
+import csv
+import math
 
 from datetime import timedelta, datetime
+from collections import defaultdict
 
 from . import collector_base 
 
 FINAL_DATE = datetime(2023, 1, 1)
-
-class CollatedRelatedGamesCollector:
-    """
-    A class to collate all the information about related games and expand upon just the ID's.
-    """
-    def __init__(self, name:str, debug=0) -> None:
-        base = collector_base.CollectorBase(debug=debug)
-        self.debug = debug
-        name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/related_games/{name}.csv")
-
-    def run(self, game_start_index=0, user_start_index=0) -> None:
-        self.api.get_expanded_user_related_games_for_all_games(game_start_index, user_start_index)
 
 class GameInformationCollector:
     """
@@ -32,6 +23,29 @@ class GameInformationCollector:
     def run(self, start_index=0) -> None:
         self.api.get_all_games_with_info(start_index)
 
+class RelatedGamesCollector:
+    def __init__(self, name: str, debug=0):
+        base = collector_base.CollectorBase(debug=debug)
+        self.debug = debug
+        name = name.replace(" ", "_", -1).lower()
+        self.api = Collector(base, f"data/related_games/{name}.csv")
+
+    def run(self, percentage_limit):
+        self.api.collect_all_related_games_data(percentage_limit=percentage_limit)
+
+class CollatedRelatedGamesCollector:
+    """
+    A class to collate all the information about related games and expand upon just the ID's.
+    """
+    def __init__(self, name:str, debug=0) -> None:
+        base = collector_base.CollectorBase(debug=debug)
+        self.debug = debug
+        name = name.replace(" ", "_", -1).lower()
+        self.api = Collector(base, f"data/related_games/{name}.csv")
+
+    def run(self, game_start_index=0, user_start_index=0) -> None:
+        self.api.get_users_related_games_for_all_games(game_start_index, user_start_index)
+
 class IndividualRelatedGamesCollector:
     """
     A class designed to collect all users' played games for every game.
@@ -44,7 +58,16 @@ class IndividualRelatedGamesCollector:
     def run(self, game_id:str, user_start_index=0) -> None:
         self.api.get_users_related_games_for_game(game_id, user_start_index)
 
-class WorldRecordHistoryCollector:
+class CollatedWorldRecordHistoryCollector:
+    def __init__(self, name: str, debug=0) -> None:
+        base = collector_base.CollectorBase(debug=debug)
+        self.debug = debug
+        self.api = Collector(base, f"data/jorld_record_history/{name}.csv", debug=debug) 
+
+    def run(self, game_start_index=0, start_date=None, end_date=FINAL_DATE) -> None:
+        self.api.get_world_record_history_for_all_games(game_start_index, start_date, end_date)
+
+class IndividualWorldRecordHistoryCollector:
     """
     A class designed to collect world record history for every game from it's
     release date to the cutoff date
@@ -57,8 +80,7 @@ class WorldRecordHistoryCollector:
         self.categories = base.get_game(self.game_id).categories
 
     def run(self, start_date=None, end_date=FINAL_DATE) -> None:
-        for category in self.categories:
-            self.api.record_history_game_category(self.game_id, category.id, start_date, end_date)
+        self.api.get_world_record_history_for_game(self.game_id, start_date, end_date)
 
 class Collector:
     """
@@ -70,83 +92,76 @@ class Collector:
         self.debug = debug
         self.filename = filename
 
-    def record_history_game_category(self, game_id: str, category_id: str, start_date=None, end_date=FINAL_DATE) -> None:
+    def get_world_record_history_for_game(self, game_id: str, start_date=None, end_date=FINAL_DATE) -> None:
         """
         Get the record history from release until cutoff date for a category of
         a game.
         """
         game = self.base.get_game(game_id)
-        category = self.base.get_category(game, category_id)
-
-        # If a start date is not specified, we go from when the game was released.
-        if start_date == None:
-            start_date = datetime.strptime(game.data['release-date'], "%Y-%m-%d")
-
         with open(self.filename, 'a') as openfile:
-            openfile.write("game_name,game_id,category_name,category_id,date,user_id,run_id,time\n")
+            openfile.write("game_name,game_id,category_name,category_id,level_id,date,user_id,run_id,time\n")
+            for category in game.categories:
+                if category.type == 'per-level':
+                    for level in game.levels:
+                        if start_date == None:
+                            start_date = datetime.strptime(game.release_date, "%Y-%m-%d")
 
-            # Add a week from the release date to allow a run to be on the board.
-            current_date = start_date + timedelta(weeks=1)
+                        current_date = start_date + timedelta(weeks=1)
 
-            while current_date < end_date:
-                run_data = self.base.get_top_of_leaderboard(game_id, category.id, current_date).data
+                        while current_date < end_date:
+                            run_data = self.base.get_top_of_leaderboard(game_id, category.id, current_date, level_id=level.id).data
 
-                try:
-                   run_data = run_data["runs"][0]["run"]
-                except IndexError:
-                    # We only encounter this error if there are no records on the given date.
-                    # This happens if the category hasn't been invented on the date we select.
-                    current_date += timedelta(weeks=1)
-                    continue
+                            try:
+                               run_data = run_data["runs"][0]["run"]
+                            except IndexError:
+                                # We only encounter this error if there are no records on the given date.
+                                # This happens if the category hasn't been invented on the date we select.
+                                current_date += timedelta(weeks=1)
+                                continue
 
-                run_id = run_data["id"]
-                time = run_data["times"]["primary_t"]
-                users = run_data["players"]
+                            run_id = run_data["id"]
+                            time = run_data["times"]["primary_t"]
+                            users = run_data["players"]
+                            run_users = "" # This should never be present in the data
+                            if len(users) == 1:
+                                run_users = users[0]['id'] if users[0]['rel'] == 'user' else users[0]['name']
+                            if len(users) > 1:
+                                run_users = f"\"{','.join([user['id'] for user in users if user['rel'] == 'user'])}\""
 
-                for user in users :
-                    user_id = user.get("name") if user.get("id") is None else user.get("id")
-                    openfile.write(f"{game.name},{game.id},{category.name},{category.id},{current_date.isoformat()},{user_id},{run_id},{time}\n")
+                            openfile.write(f"{game.name},{game.id},{category.name},{category.id},{level.id},{current_date.isoformat()},{run_users},{run_id},{time}\n")
 
-                current_date += timedelta(weeks=1)
+                            current_date += timedelta(weeks=1)
+                else:
+                    if start_date == None:
+                        start_date = datetime.strptime(game.release_date, "%Y-%m-%d")
+
+                    current_date = start_date + timedelta(weeks=1)
+
+                    while current_date < end_date:
+                        run_data = self.base.get_top_of_leaderboard(game_id, category.id, current_date).data
+
+                        try:
+                           run_data = run_data["runs"][0]["run"]
+                        except IndexError:
+                            # We only encounter this error if there are no records on the given date.
+                            # This happens if the category hasn't been invented on the date we select.
+                            current_date += timedelta(weeks=1)
+                            continue
+
+                        run_id = run_data["id"]
+                        time = run_data["times"]["primary_t"]
+                        users = run_data["players"]
+                        run_users = "" # This should never be present in the data
+                        if len(users) == 1:
+                            run_users = users[0]['id'] if users[0]['rel'] == 'user' else users[0]['name']
+                        if len(users) > 1:
+                            run_users = f"\"{','.join([user['id'] for user in users if user['rel'] == 'user'])}\""
+
+                        openfile.write(f"{game.name},{game.id},{category.name},{category.id},None,{current_date.isoformat()},{run_users},{run_id},{time}\n")
+
+                        current_date += timedelta(weeks=1)
 
     def get_user_ids_for_game(self, game_id: str) -> list[str]:
-        """
-        Get a list of user ids that have submitted a run for a game.
-        """
-        game = self.base.get_game(game_id)
-        runs_uri = game.data["links"][1]["uri"]
-        max_runs = 200
-
-        user_ids = set()
-
-        for category in game.categories:
-            verified_runs_uri = f"{runs_uri}&category={category.id}&max={max_runs}&status=verified&orderby=date&direction=asc"
-            more_pages = True
-
-            while more_pages:
-                #if self.debug >= 1: print(verified_runs_uri)
-                response_data = self.base.get(verified_runs_uri)
-                if response_data == None:
-                    return []
-
-                for runs in response_data.get("data"):
-                    for player in runs.get("players"):
-                        user_id = player.get("id")
-                        if user_id == None:
-                            break
-                
-                        user_ids.add(user_id)
-                
-                if response_data.get("pagination").get("size") < max_runs:
-                    more_pages = False
-
-                for link in response_data.get("pagination")["links"]:
-                    if link["rel"] == "next":
-                        verified_runs_uri = link["uri"]
-
-        return list(user_ids)
-
-    def get_user_ids_for_game_v2(self, game_id: str) -> list[str]:
         user_ids = set()
         game = self.base.get_game(game_id)
         for category in game.categories:
@@ -238,6 +253,18 @@ class Collector:
 
         return (user_numbers, guest_numbers)
 
+    def get_world_record_history_for_all_games(self, game_start_index, start_date, end_date) -> None:
+        all_game_ids = self.get_all_games()
+        total_len = len(all_game_ids)
+        if self.debug >= 1: print(total_len)
+
+        for index, game_id in enumerate(reversed(all_game_ids[:game_start_index])):
+            if self.debug >= 1: print(f"game_index={game_start_index-index},total={total_len},{game_id=}")
+            game_name = self.base.get_game(game_id).name
+            game_name = game_name.replace(" ", "_", -1).replace("/", '_', -1).lower()
+            writeApi = Collector(self.base, f"data/world_record_history/{game_start_index-index:05}_{game_name}.csv", debug=1)
+            writeApi.get_world_record_history_for_game(game_id, start_date, end_date)
+
     def get_users_related_games_for_all_games(self, game_start_index=0, user_start_index=0) -> None:
         """
         Get all the games that a user has submitted runs for for every game.
@@ -253,23 +280,13 @@ class Collector:
             writeApi = Collector(self.base, f"data/related_games/{index+game_start_index:05}_{game_name}.csv", debug=1)
             writeApi.get_users_related_games_for_game(game_id, user_start_index)
             user_start_index = 0
-    
-    def get_expanded_user_related_games_for_all_games(self, game_start_index=0, user_start_index=0) -> None:
-        all_game_ids = self.get_all_games()
-        total_len = len(all_game_ids)
-        if self.debug >= 1: print(total_len)
-        for index, game_id in enumerate(all_game_ids[game_start_index:]):
-            if self.debug >= 1: print(f"game_index={game_start_index+index},total={total_len},{game_id=}")
-            self.get_expanded_users_related_games_for_game(game_id, user_start_index)
-            user_start_index = 0
-
 
     def get_users_related_games_for_game(self, game_id: str, start_index=0) -> None:
         """
         Get all the games that a user has submitted runs for for a single game.
         """
         original_game_id = game_id
-        user_ids = self.get_user_ids_for_game_v2(game_id)
+        user_ids = self.get_user_ids_for_game(game_id)
         all_user_ids_length = len(user_ids)
 
         with open(self.filename, 'a') as openfile:
@@ -296,43 +313,6 @@ class Collector:
                     level_id = run["run"]["level"]
         
                     openfile.write(f"{original_game_id},{user_id},{game_id},{category_id},{level_id},{position}\n")
-
-    def get_expanded_users_related_games_for_game(self, game_id: str, start_index=0) -> None:
-        original_game_id = game_id
-        original_game_name = self.base.get_game(game_id).name
-        user_ids = self.get_user_ids_for_game(game_id)
-        all_user_ids_length = len(user_ids)
-
-        with open(self.filename, 'a') as openfile:
-            openfile.write(f"original_game_id,original_game_name,user_id,user_location,game_id,game_name,category_id,category_name,level_id,level_name,position\n")
-        
-            for index, user_id in enumerate(user_ids[start_index:]):
-        
-                if self.debug >= 1: print(f"user_index={index+start_index},total={all_user_ids_length},{user_id=}")
-        
-                pb_uri = self.base.get_user(user_id).data["links"][3]["uri"]
-                response_data = self.base.get(pb_uri)
-                if response_data == None:
-                    return
-        
-                user_runs = response_data.get("data")
-                if user_runs == None:
-                    if self.debug >= 1: print(f"user_runs is None,{time.ctime()=},{response_data=}")
-                    return
-        
-                for run in user_runs:
-                    position = run["place"]
-                    game_id = run["run"]["game"]
-                    category_id = run["run"]["category"]
-                    level_id = run["run"]["level"]
-
-                    user_location = self.base.get_user(user_id).data["location"]["country"]["names"]["international"]
-                    game = self.base.get_game(game_id)
-                    game_name = game.data["names"]["international"]
-                    category_name = self.base.get_category(game,category_id).data["name"]
-                    level_name = self.base.get_level(level_id).data["name"]
-        
-                    openfile.write(f"{original_game_id},{original_game_name},{user_id},{user_location},{game_id},{game_name},{category_id},{category_name},{level_id},{level_name},{position}\n")
 
     def get_all_games(self) -> list[str]:
         """
@@ -381,3 +361,32 @@ class Collector:
                 created_date = game.created
                 num_users, num_guests = self.get_number_of_users_for_game_v2(game_id)
                 openfile.write(f"{game_id},{game_name},{release_date},{created_date},{num_users},{num_guests}\n")
+
+    def collect_all_related_games_data(self, percentage_limit=1) -> None:
+        path = "data/related_games/"
+        filenames = []
+        with os.scandir(path) as directory:
+            for file in directory:
+                if file.name.endswith('.csv') and file.is_file():
+                    filenames.append(file)
+
+        limit = math.floor(len(filenames) * percentage_limit)
+
+        sourcetarget_to_number = defaultdict(int) 
+        for file in filenames[:limit]:
+            with open(file) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                for row in csv_reader:
+                    if len(row) < 3:
+                        continue
+                    sourcetarget = ' '.join([row[0],row[2]])
+                    sourcetarget_to_number[sourcetarget] += 1
+                    
+        print(len(sourcetarget_to_number))
+
+        with open(f"{self.filename}", 'w') as openfile:
+            for key, value in sourcetarget_to_number.items():
+                split_key = key.split(' ')
+                source = split_key[0]
+                target = split_key[1]
+                openfile.write(f"{source},{target},{value}\n")

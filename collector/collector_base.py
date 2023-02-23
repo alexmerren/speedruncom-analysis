@@ -49,7 +49,9 @@ class CollectorBase:
     def get_leaderboard(self, game_id, category_id, date) -> srcomapi.datatypes.Leaderboard:
         return srcomapi.datatypes.Leaderboard(self.api, data=self.api.get("leaderboards/{}/category/{}?embed=variables&date={}".format(game_id, category_id, date.isoformat())))
 
-    def get_top_of_leaderboard(self, game_id, category_id, date) -> srcomapi.datatypes.Leaderboard:
+    def get_top_of_leaderboard(self, game_id, category_id, date, level_id=None) -> srcomapi.datatypes.Leaderboard:
+        if level_id != None:
+            return srcomapi.datatypes.Leaderboard(self.api, data=self.api.get("leaderboards/{}/level/{}/{}?embed=variables".format(game_id, level_id, category_id)))
         return srcomapi.datatypes.Leaderboard(self.api, data=self.api.get("leaderboards/{}/category/{}?embed=variables&top=1&date={}".format(game_id, category_id, date.isoformat())))
 
     def search(self):
