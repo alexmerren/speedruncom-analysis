@@ -1,7 +1,7 @@
 from collector import collector
 
 def main():
-    collector.GameInformationCollector("updated all games", debug=1).run(start_index=4924)
+    collector.GameInformationCollector("updated all games", debug=1).run(start_index=24460)
 
 if __name__ == "__main__":
     main()

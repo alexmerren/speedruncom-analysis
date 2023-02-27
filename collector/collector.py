@@ -7,6 +7,18 @@ from . import collector_base
 
 FINAL_DATE = datetime(2023, 1, 1)
 
+class GameInformationCollector:
+    """
+    A class designed to collect basic information for every game and write to csv.
+    """
+    def __init__(self, name:str, debug=0) -> None:
+        base = collector_base.CollectorBase(debug=debug)
+        name = name.replace(" ", "_", -1).lower()
+        self.api = Collector(base, f"data/games_information/{name}.csv", debug=debug)
+
+    def run(self, start_index=0) -> None:
+        self.api.get_all_games_with_info(start_index)
+
 class CollatedRelatedGamesCollector:
     """
     A class to collate all the information about related games and expand upon just the ID's.
@@ -19,18 +31,6 @@ class CollatedRelatedGamesCollector:
 
     def run(self, game_start_index=0, user_start_index=0) -> None:
         self.api.get_expanded_user_related_games_for_all_games(game_start_index, user_start_index)
-
-class GameInformationCollector:
-    """
-    A class designed to collect basic information for every game and write to csv.
-    """
-    def __init__(self, name:str, debug=0) -> None:
-        base = collector_base.CollectorBase(debug=debug)
-        name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/games_information/{name}.csv", debug=debug)
-
-    def run(self, start_index=0) -> None:
-        self.api.get_all_games_with_info(start_index)
 
 class IndividualRelatedGamesCollector:
     """
@@ -110,6 +110,9 @@ class Collector:
                 current_date += timedelta(weeks=1)
 
     def get_user_ids_for_game(self, game_id: str) -> list[str]:
+        if game_id == "y65797de": # Subway surfers is cursed rn
+            return []
+
         user_ids = set()
         game = self.base.get_game(game_id)
         for category in game.categories:
@@ -131,68 +134,51 @@ class Collector:
 
         return list(user_ids)
 
-    def get_number_of_runs_users_guests_for_game(self, game_id: str) -> tuple[int, int, int]:
+    def get_number_of_users_guests_for_game(self, game_id: str) -> tuple[int, int]:
+        if game_id == "y65797de": # Subway surfers is cursed rn
+            return (-999, -999)
+
         user_ids, guest_ids = set(), set()
-        num_runs = 0
-        max_runs_pagination = 200
         game = self.base.get_game(game_id)
 
         for category in game.categories:
             if category.type == 'per-level':
                 for level in game.levels:
-
-                    more_pages = True
-                    runs_game_category_level_uri = f"{game.data['links'][1]['uri']}&category={category.id}&level={level.id}&status=verified&max={max_runs_pagination}"
-                    while more_pages:
-                        response = self.base.get(runs_game_category_level_uri)
-                        if response == None:
-                            return (-999,-999,-999)
-
-                        response_data = response.get("data")
-
-                        for run in response_data:
-                            num_runs += 1
-                            users = run["players"]
-                            for user in users:
-                                if user["rel"] == "user":
-                                    user_ids.add(user['id'])
-                                else:
-                                    guest_ids.add(user['name'])
-
-                        if response.get("pagination").get("size") < max_runs_pagination:
-                            more_pages = False
-
-                        for link in response.get("pagination")["links"]:
-                            if link["rel"] == "next":
-                                runs_game_category_level_uri = link["uri"]
-
-            else:
-                more_pages = True
-                runs_game_category_uri = f"{game.data['links'][1]['uri']}&category={category.id}&status=verified&max={max_runs_pagination}"
-                while more_pages:
-                    response = self.base.get(runs_game_category_uri)
-                    if response == None:
-                        return (-999,-999,-999)
-
-                    response_data = response.get("data")
-
-                    for run in response_data:
-                        num_runs += 1
-                        users = run["players"]
+                    leaderboard = srcomapi.datatypes.Leaderboard(self.base.api, data=self.base.api.get("leaderboards/{}/level/{}/{}?embed=variables".format(game.id, level.id, category.id)))
+                    for run in leaderboard.runs:
+                        users = run["run"].data["players"]
                         for user in users:
                             if user["rel"] == "user":
                                 user_ids.add(user['id'])
                             else:
                                 guest_ids.add(user['name'])
-
-                    if response.get("pagination").get("size") < max_runs_pagination:
-                        more_pages = False
-
-                    for link in response.get("pagination")["links"]:
-                        if link["rel"] == "next":
-                            runs_game_category_uri = link["uri"]
+            else:
+                leaderboard = srcomapi.datatypes.Leaderboard(self.base.api, data=self.base.api.get("leaderboards/{}/category/{}?embed=variables".format(game.id, category.id)))
+                for run in leaderboard.runs:
+                    users = run["run"].data["players"]
+                    for user in users:
+                        if user["rel"] == "user":
+                            user_ids.add(user['id'])
+                        else:
+                            guest_ids.add(user['name'])
                                 
-        return (num_runs, len(user_ids), len(guest_ids))
+        return (len(user_ids), len(guest_ids))
+
+    def get_num_runs_from_stats_page(self, game_id: str) -> int:
+        if game_id in ["k6q4rqzd", "yd4ke0p6", "yd4kwop6", "9dowpwe1", "36980y8d", "w6jq8x1j", "lde3jkx6", "j1lq9je6", "369pkl01"]: # All the broken gamestats pages
+            return -999
+
+        game = self.base.get_game(game_id)
+        weblink = game.data.get("weblink")
+        gamestats_weblink = f"{weblink}/gamestats"
+        response = self.base.get_text(gamestats_weblink)
+        if response == None:
+            return -999
+
+        start_index = response.find("Number of runs")
+        response_section = response[start_index+65:start_index+80]
+        numbers = response_section.split()
+        return int(numbers[0].replace(',', ''))
 
     def get_users_related_games_for_all_games(self, game_start_index=0, user_start_index=0) -> None:
         """
@@ -253,43 +239,6 @@ class Collector:
         
                     openfile.write(f"{original_game_id},{user_id},{game_id},{category_id},{level_id},{position}\n")
 
-    def get_expanded_users_related_games_for_game(self, game_id: str, start_index=0) -> None:
-        original_game_id = game_id
-        original_game_name = self.base.get_game(game_id).name
-        user_ids = self.get_user_ids_for_game(game_id)
-        all_user_ids_length = len(user_ids)
-
-        with open(self.filename, 'a') as openfile:
-            openfile.write(f"original_game_id,original_game_name,user_id,user_location,game_id,game_name,category_id,category_name,level_id,level_name,position\n")
-        
-            for index, user_id in enumerate(user_ids[start_index:]):
-        
-                if self.debug >= 1: print(f"user_index={index+start_index},total={all_user_ids_length},{user_id=}")
-        
-                pb_uri = self.base.get_user(user_id).data["links"][3]["uri"]
-                response_data = self.base.get(pb_uri)
-                if response_data == None:
-                    return
-        
-                user_runs = response_data.get("data")
-                if user_runs == None:
-                    if self.debug >= 1: print(f"user_runs is None,{time.ctime()=},{response_data=}")
-                    return
-        
-                for run in user_runs:
-                    position = run["place"]
-                    game_id = run["run"]["game"]
-                    category_id = run["run"]["category"]
-                    level_id = run["run"]["level"]
-
-                    user_location = self.base.get_user(user_id).data["location"]["country"]["names"]["international"]
-                    game = self.base.get_game(game_id)
-                    game_name = game.data["names"]["international"]
-                    category_name = self.base.get_category(game,category_id).data["name"]
-                    level_name = self.base.get_level(level_id).data["name"]
-        
-                    openfile.write(f"{original_game_id},{original_game_name},{user_id},{user_location},{game_id},{game_name},{category_id},{category_name},{level_id},{level_name},{position}\n")
-
     def get_all_game_ids(self) -> list[str]:
         """
         Get a time-ordered (ascending) list of game id's for every game.
@@ -327,7 +276,7 @@ class Collector:
         if self.debug >= 1: print(len(game_ids))
 
         with open(self.filename, 'a') as openfile:
-            openfile.write("game_id,game_name,release_date,created_date,num_runs,num_users,num_guests\n")
+            openfile.write("game_id,game_name,release_date,created_date,num_categories,num_levels,num_runs,num_users,num_guests\n")
 
             for index, game_id in enumerate(game_ids[start_index:]):
                 if self.debug >= 1: print(f"index={index+start_index},len={len(game_ids)},{game_id=}")
@@ -335,6 +284,10 @@ class Collector:
                 game_name = game.name.replace(",", " ", -1)
                 release_date = game.release_date
                 created_date = game.created
+                num_categories = len(game.categories)
+                num_levels = len(game.levels)
+                num_runs = self.get_num_runs_from_stats_page(game_id)
+                num_users, num_guests = self.get_number_of_users_guests_for_game(game_id)
 
                 developers = "None"
                 if len(game.data["developers"]) == 1:
@@ -342,5 +295,4 @@ class Collector:
                 if len(game.data["developers"]) > 1:
                     developers = f"\"{','.join([developer.id for developer in game.developers])}\""
 
-                num_runs, num_users, num_guests = self.get_number_of_runs_users_guests_for_game(game_id)
-                openfile.write(f"{game_id},{game_name},{developers},{release_date},{created_date},{num_runs},{num_users},{num_guests}\n")
+                openfile.write(f"{game_id},{game_name},{developers},{release_date},{created_date},{num_categories},{num_levels},{num_runs},{num_users},{num_guests}\n")
