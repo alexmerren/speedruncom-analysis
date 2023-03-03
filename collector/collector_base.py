@@ -55,6 +55,22 @@ class CollectorBase:
     def search(self):
         pass
 
+    def get_text(self, uri: str):
+        response = requests_c.get(uri)
+        if response.status_code in [404,400]:
+            print(f"({response.status_code}) {response.reason}: Exiting. {response.json()=}")
+            return None
+        if response.status_code in [420,504]:
+            print(f"({response.status_code}) {response.reason}: re-requesting.")
+            time.sleep(REQUEST_TIMEOUT_SLEEP)
+            return self.get(uri)
+        try:
+            return response.text
+        except: 
+            print(f"({response.status_code}) {response.reason}: re-requesting")
+            time.sleep(REQUEST_TIMEOUT_SLEEP)
+            return self.get(uri)
+
     def get(self, uri: str):
         response = requests_c.get(uri)
         if response.status_code in [404,400]:
