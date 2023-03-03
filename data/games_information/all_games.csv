@@ -1,4 +1,4 @@
-game_id,game_name,release_date,created_date,num_categories,num_levels,num_runs,num_users,num_guests
+game_id,game_name,developers,release_date,created_date,num_categories,num_levels,num_runs,num_users,num_guests
 j1n8nj91,Computer Space,None,1972-01-01,2022-10-11T15:53:28Z,3,0,2,2,0
 9d389y91,Mattel Auto Race,None,1976-01-01,2022-08-23T03:09:59Z,2,0,2,1,1
 3dx22ny1,Stunt Cycle,None,1976-01-01,2018-01-05T08:29:09Z,1,1,4,4,0
