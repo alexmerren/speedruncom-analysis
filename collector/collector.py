@@ -138,6 +138,9 @@ class Collector:
         if game_id == "y65797de": # Subway surfers is cursed rn
             return (-999, -999)
 
+        if game_id in ["k6qw78o6"]: # 404 Not found
+            return -1
+
         user_ids, guest_ids = set(), set()
         game = self.base.get_game(game_id)
 
@@ -165,8 +168,11 @@ class Collector:
         return (len(user_ids), len(guest_ids))
 
     def get_num_runs_from_stats_page(self, game_id: str) -> int:
-        if game_id in ["k6q4rqzd", "yd4ke0p6", "yd4kwop6", "9dowpwe1", "36980y8d", "w6jq8x1j", "lde3jkx6", "j1lq9je6", "369pkl01"]: # All the broken gamestats pages
+        if game_id in ["k6q4rqzd", "yd4ke0p6", "yd4kwop6", "9dowpwe1", "36980y8d", "w6jq8x1j", "lde3jkx6", "j1lq9je6", "369pkl01", "9do8j8o1", "pdvzyqv6"]: # 504 timeout on gamestats page
             return -999
+
+        if game_id in ["k6qw78o6"]: # 404 Not Found
+            return -1
 
         game = self.base.get_game(game_id)
         weblink = game.data.get("weblink")
