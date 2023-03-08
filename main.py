@@ -3,12 +3,7 @@ from os import listdir, rename
 from os.path import isfile, join
 
 def main():
-    path = "data/related_games/"
-    files = [f for f in listdir(path) if isfile(join(path, f))]
-    invalid_chars = ["<", ">", ":", "\"", "?", "|", "?", "*"]
-    for filename in files:
-        if any(char in filename for char in invalid_chars):
-            print(filename)
+    collector.RelatedGamesInformationCollater("all games 10 percent", debug=1).run(percentage_limit=0.1)
 
 
 if __name__ == "__main__":
