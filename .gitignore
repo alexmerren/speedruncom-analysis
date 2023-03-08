@@ -135,3 +135,4 @@ pyvenv.cfg
 *.sqlite
 lib64/
 lib64
+data/too_big/*

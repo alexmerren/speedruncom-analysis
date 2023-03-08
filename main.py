@@ -1,14 +1,15 @@
 from collector import collector
+from os import listdir, rename
+from os.path import isfile, join
 
 def main():
-    # data/games_information - 
-    #collector.GameInformationCollector("updated all games", debug=1).run(start_index=0)
+    path = "data/related_games/"
+    files = [f for f in listdir(path) if isfile(join(path, f))]
+    invalid_chars = ["<", ">", ":", "\"", "?", "|", "?", "*"]
+    for filename in files:
+        if any(char in filename for char in invalid_chars):
+            print(filename)
 
-    # data/related_games - all data collection for all games
-    # collector.CollatedRelatedGamesCollector("").run(game_start_index=0)
-
-    # data/related_games - spot data collection for missing values
-    collector.IndividualRelatedGamesCollector("subway_surfers", debug=1).run(game_id="y65797de")
 
 if __name__ == "__main__":
     main()
