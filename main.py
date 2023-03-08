@@ -8,7 +8,8 @@ def main():
     # collector.CollatedRelatedGamesCollector("").run(game_start_index=0)
 
     # data/related_games - spot data collection for missing values
-    collector.IndividualRelatedGamesCollector("subway_surfers", debug=1).run(game_id="y65797de")
+    # collector.IndividualRelatedGamesCollector("subway_surfers", debug=1).run(game_id="y65797de")
+    collector.RelatedGamesInformationCollater("all games 10 percent", debug=1).run(percentage_limit=0.1)
 
 if __name__ == "__main__":
     main()

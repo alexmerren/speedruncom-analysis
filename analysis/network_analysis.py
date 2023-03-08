@@ -22,10 +22,8 @@ def find_top_n_pagerank_nodes(g: nx.Graph, n=1):
     values_sorted = dict(sorted(values.items(), key=lambda item: item[1], reverse=True))
     return list(values_sorted)[0:n]
 
-def get_graph_order_size_avgdeg(g: nx.Graph):
-    N, K = g.order(), g.size()
-    avg_deg = float(K) / N
-    return N, K, avg_deg
+def get_graph_order_size(g: nx.Graph):
+    return g.order(), g.size()
 
 def find_top_n_betweenness_centrality_nodes(g: nx.Graph, n=10):
     degree_centrality = nx.degree_centrality(g)
@@ -39,12 +37,12 @@ def find_top_n_betweenness_centrality_nodes(g: nx.Graph, n=10):
     return list(set(keys_top_degree) & set(keys_top_betweenness))
 
 def main():
-    filename = "../data/too_big/all_related_games.csv"
-    # filename = "../data/too_big/all_related_games_10_percent.csv"
+    # filename = "../data/too_big/all_related_games.csv"
+    filename = "../data/too_big/all_games_10_percent.csv"
     edges = get_weighted_edges_from_csv(filename)
     graph = generate_graph_from_edges(edges)
-    print(get_graph_order_size_avgdeg(graph))
-    print(find_top_n_betweenness_centrality_nodes(graph))
+    print(get_graph_order_size(graph))
+    print(find_top_n_betweenness_centrality_nodes(graph, n=100))
 
 if __name__ == "__main__":
     main()

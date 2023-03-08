@@ -1,7 +1,11 @@
 import time 
 import srcomapi
+import csv
+import math
+import os
 
 from datetime import timedelta, datetime
+from collections import defaultdict
 
 from . import collector_base 
 
@@ -18,6 +22,16 @@ class GameInformationCollector:
 
     def run(self, start_index=0) -> None:
         self.api.get_all_games_with_info(start_index)
+
+class RelatedGamesInformationCollater:
+    def __init__(self, name: str, debug=0):
+        base = collector_base.CollectorBase(debug=debug)
+        self.debug = debug
+        name = name.replace(" ", "_", -1).lower()
+        self.api = Collector(base, f"data/related_games/{name}.csv")
+
+    def run(self, percentage_limit):
+        self.api.collect_all_related_games_data(percentage_limit=percentage_limit)
 
 class CollatedRelatedGamesCollector:
     """
@@ -302,3 +316,32 @@ class Collector:
                     developers = f"\"{','.join([developer.id for developer in game.developers])}\""
 
                 openfile.write(f"{game_id},{game_name},{developers},{release_date},{created_date},{num_categories},{num_levels},{num_runs},{num_users},{num_guests}\n")
+
+    def collect_all_related_games_data(self, percentage_limit=1) -> None:
+        path = "data/related_games/"
+        filenames = []
+        with os.scandir(path) as directory:
+            for file in directory:
+                if file.name.endswith('.csv') and file.is_file():
+                    filenames.append(file)
+
+        limit = math.floor(len(filenames) * percentage_limit)
+
+        sourcetarget_to_number = defaultdict(int) 
+        for file in filenames[:limit]:
+            with open(file) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                for row in csv_reader:
+                    if len(row) < 3:
+                        continue
+                    sourcetarget = ' '.join([row[0],row[2]])
+                    sourcetarget_to_number[sourcetarget] += 1
+                    
+        print(len(sourcetarget_to_number))
+
+        with open(f"{self.filename}", 'w') as openfile:
+            for key, value in sourcetarget_to_number.items():
+                split_key = key.split(' ')
+                source = split_key[0]
+                target = split_key[1]
+                openfile.write(f"{source},{target},{value}\n")
