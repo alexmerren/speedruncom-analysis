@@ -332,6 +332,7 @@ class Collector:
             with open(file) as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
                 for row in csv_reader:
+                    # If there are less than 3 items in a row, skip it (this should never happen ideally).
                     if len(row) < 3:
                         continue
                     sourcetarget = ' '.join([row[0],row[2]])
@@ -344,6 +345,7 @@ class Collector:
                 split_key = key.split(' ')
                 source = split_key[0]
                 target = split_key[1]
+                # Don't allow edges that refer to the same source and target.
                 if source == target:
                     continue
                 openfile.write(f"{source},{target},{value}\n")
