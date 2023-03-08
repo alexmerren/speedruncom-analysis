@@ -28,7 +28,7 @@ class RelatedGamesInformationCollater:
         base = collector_base.CollectorBase(debug=debug)
         self.debug = debug
         name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/related_games/{name}.csv")
+        self.api = Collector(base, f"data/too_big/{name}.csv")
 
     def run(self, percentage_limit):
         self.api.collect_all_related_games_data(percentage_limit=percentage_limit)
@@ -344,4 +344,6 @@ class Collector:
                 split_key = key.split(' ')
                 source = split_key[0]
                 target = split_key[1]
+                if source == target:
+                    continue
                 openfile.write(f"{source},{target},{value}\n")
