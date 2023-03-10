@@ -1,31 +1,6 @@
-import networkx as nx
-
 import csv
-
-from datetime import datetime
-from collections import defaultdict
-
-FINAL_DATE = datetime(2023,1,1)
-
-def generate_network_filter(filename: str):
-    with open(filename, 'r') as openfile:
-        csv_reader = csv.reader(openfile)
-        next(csv_reader)
-        filter_map = defaultdict(bool)
-        for row in csv_reader:
-            # Check if the created/release date is after 2023, if it is then we can ignore it in the network.
-            release_date = datetime.strptime(row[3], "%Y-%m-%d")
-            if row[4] == "None":
-                row[4] = "2017-10-22T05:21:29Z" # This is a completely random date before the final date.
-            created_date = datetime.strptime(row[4], "%Y-%m-%dT%H:%M:%SZ")
-
-            disallowed_games = ["y65797de"]
-
-            if created_date < FINAL_DATE and release_date < FINAL_DATE and \
-                row[0] not in disallowed_games and row[1] not in disallowed_games:
-                filter_map[row[0]] = True
-
-    return filter_map
+import networkx as nx
+from analysis import common
 
 def get_weighted_edges_from_csv(filename, filter=None):
     with open(filename, 'r') as openfile:
@@ -56,7 +31,7 @@ def find_betweenness_centrality_all_nodes(g: nx.Graph, filename: str):
 
 def main():
     filter_filename = "../data/games/metadata/all_games.csv"
-    filter_map = generate_network_filter(filter_filename)
+    filter_map = common.generate_network_filter(filter_filename)
 
     graph_filename = "../data/too_big/all_games.csv"
     edges_list = get_weighted_edges_from_csv(graph_filename, filter=filter_map)
