@@ -27,6 +27,24 @@ def generate_network_filter(filename: str):
 
     return filter_map
 
+def get_weighted_edges_from_csv(filename, filter=None):
+    with open(filename, 'r') as openfile:
+        csv_reader = csv.reader(openfile)
+        next(csv_reader)
+
+        edges = list()
+        for row in csv_reader:
+            if filter is None:
+                edges.append(tuple([row[0], row[1], int(row[2])]))
+                continue
+            
+            if not filter.get(row[0]) or not filter.get(row[1]):
+                continue
+
+            edges.append(tuple([row[0], row[1], int(row[2])]))
+
+    return edges
+
 def get(uri: str):
     print(uri)
     response = requests.get(uri)
