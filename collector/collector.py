@@ -124,9 +124,6 @@ class Collector:
                 current_date += timedelta(weeks=1)
 
     def get_user_ids_for_game(self, game_id: str) -> list[str]:
-        if game_id == "y65797de": # Subway surfers is cursed rn
-            return []
-
         user_ids = set()
         game = self.base.get_game(game_id)
         for category in game.categories:
@@ -149,11 +146,8 @@ class Collector:
         return list(user_ids)
 
     def get_number_of_users_guests_for_game(self, game_id: str) -> tuple[int, int]:
-        if game_id == "y65797de": # Subway surfers is cursed rn
-            return (-999, -999)
-
         if game_id in ["k6qw78o6"]: # 404 Not found
-            return -1
+            return (-1, -1)
 
         user_ids, guest_ids = set(), set()
         game = self.base.get_game(game_id)
