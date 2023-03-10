@@ -55,7 +55,7 @@ def find_betweenness_centrality_all_nodes(g: nx.Graph, filename: str):
             openfile.write(f"{node},{value}\n")
 
 def main():
-    filter_filename = "../data/games_metadata/all_games.csv"
+    filter_filename = "../data/games/metadata/all_games.csv"
     filter_map = generate_network_filter(filter_filename)
 
     graph_filename = "../data/too_big/all_games.csv"
@@ -64,7 +64,7 @@ def main():
 
     print(graph.order(), graph.size())
 
-    betweenness_connectivity_filename = "../data/too_big/all_games_bc.csv"
+    betweenness_connectivity_filename = "../data/games/network_final/all_games_betweenness_connectivity.csv"
     find_betweenness_centrality_all_nodes(graph, betweenness_connectivity_filename)
 
 if __name__ == "__main__":

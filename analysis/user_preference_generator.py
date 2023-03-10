@@ -53,13 +53,13 @@ def write_user_preferences_file(filename: str, users_games: dict[str, set[str]])
             openfile.write(f"{user_id},{games}\n")
 
 def main():
-    filter_filename = "../data/games_metadata/all_games.csv"
+    filter_filename = "../data/games/metadata/all_games.csv"
     filter_map = generate_games_filter(filter_filename)
 
-    related_games_directory = "../data/related_games/"
+    related_games_directory = "../data/games/network_raw/"
     users_games = generate_user_preferences_from_raw(related_games_directory, filter=filter_map)
 
-    users_games_filename = "../data/collaborative_filtering/user_games_preferences.csv"
+    users_games_filename = "../data/users/user_games_preferences.csv"
     write_user_preferences_file(users_games_filename, users_games)
 
 if __name__ == "__main__":

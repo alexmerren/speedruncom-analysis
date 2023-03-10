@@ -56,7 +56,7 @@ def generate_graph_from_edges(edges_list):
     return graph_view
 
 def create_filtered_graph_from_csv(filename: str):
-    filter_filename = "../data/games_information/all_games.csv"
+    filter_filename = "../data/games/metadata/all_games.csv"
     filter_map = generate_network_filter(filter_filename)
     edges = get_weighted_edges_from_csv(filename, filter=filter_map)
     return generate_graph_from_edges(edges)

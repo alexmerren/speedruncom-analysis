@@ -18,7 +18,7 @@ class GameMetadataCollector:
     def __init__(self, name:str, debug=0) -> None:
         base = collector_base.CollectorBase(debug=debug)
         name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/games_metadata/{name}.csv", debug=debug)
+        self.api = Collector(base, f"data/games/metadata/{name}.csv", debug=debug)
 
     def run(self, start_index=0) -> None:
         self.api.get_all_games_with_info(start_index)
@@ -41,7 +41,7 @@ class CollatedRelatedGamesCollector:
         base = collector_base.CollectorBase(debug=debug)
         self.debug = debug
         name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/related_games/{name}.csv")
+        self.api = Collector(base, f"data/games/network_raw/{name}.csv")
 
     def run(self, game_start_index=0, user_start_index=0) -> None:
         self.api.get_expanded_user_related_games_for_all_games(game_start_index, user_start_index)
@@ -53,7 +53,7 @@ class IndividualRelatedGamesCollector:
     def __init__(self, name: str, debug=0) -> None:
         base = collector_base.CollectorBase(debug=debug)
         self.debug = debug
-        self.api = Collector(base, f"data/related_games/{name}.csv", debug=debug) 
+        self.api = Collector(base, f"data/games/network_raw/{name}.csv", debug=debug) 
 
     def run(self, game_id:str, user_start_index=0) -> None:
         self.api.get_users_related_games_for_game(game_id, user_start_index)
@@ -66,7 +66,7 @@ class WorldRecordHistoryCollector:
     def __init__(self, name: str) -> None:
         base = collector_base.CollectorBase(debug=1)
         name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/world_record_history/{name}.csv")
+        self.api = Collector(base, f"data/games/world_record_history/{name}.csv")
         self.game_id = base.get_game_id(name)
         self.categories = base.get_game(self.game_id).categories
 
@@ -206,7 +206,7 @@ class Collector:
             if self.debug >= 1: print(f"game_index={game_start_index+index},total={total_len},{game_id=}")
             game_name = self.base.get_game(game_id).name
             game_name = game_name.replace(" ", "_", -1).replace("/", '_', -1).lower()
-            writeApi = Collector(self.base, f"data/related_games/{index+game_start_index:05}_{game_name}.csv", debug=1)
+            writeApi = Collector(self.base, f"data/games/network_raw/{index+game_start_index:05}_{game_name}.csv", debug=1)
             writeApi.get_users_related_games_for_game(game_id, user_start_index)
             user_start_index = 0
     
@@ -312,7 +312,7 @@ class Collector:
                 openfile.write(f"{game_id},{game_name},{developers},{release_date},{created_date},{num_categories},{num_levels},{num_runs},{num_users},{num_guests}\n")
 
     def collect_all_related_games_data(self, percentage_limit=1) -> None:
-        path = "data/related_games/"
+        path = "data/games/network_raw/"
         filenames = []
         with os.scandir(path) as directory:
             for file in directory:
