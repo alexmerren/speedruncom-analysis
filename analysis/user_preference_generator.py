@@ -53,7 +53,7 @@ def write_user_preferences_file(filename: str, users_games: dict[str, set[str]])
             openfile.write(f"{user_id},{games}\n")
 
 def main():
-    filter_filename = "../data/games_information/all_games.csv"
+    filter_filename = "../data/games_metadata/all_games.csv"
     filter_map = generate_games_filter(filter_filename)
 
     related_games_directory = "../data/related_games/"

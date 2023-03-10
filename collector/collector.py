@@ -11,14 +11,14 @@ from . import collector_base
 
 FINAL_DATE = datetime(2023, 1, 1)
 
-class GameInformationCollector:
+class GameMetadataCollector:
     """
     A class designed to collect basic information for every game and write to csv.
     """
     def __init__(self, name:str, debug=0) -> None:
         base = collector_base.CollectorBase(debug=debug)
         name = name.replace(" ", "_", -1).lower()
-        self.api = Collector(base, f"data/games_information/{name}.csv", debug=debug)
+        self.api = Collector(base, f"data/games_metadata/{name}.csv", debug=debug)
 
     def run(self, start_index=0) -> None:
         self.api.get_all_games_with_info(start_index)
