@@ -2,12 +2,12 @@ import matplotlib
 import networkx as nx
 import graph_tool.all as gt
 from graph_tool.centrality import betweenness
-from analysis import common
+from common import generate_network_filter, get_weighted_edges_from_csv
 
 class GraphToolGraph():
     def __init__(self, graph_filename: str, filter_filename="../data/games/metadata/all_games.csv"):
-        filter_map = common.generate_network_filter(filter_filename)
-        edges_list = common.get_weighted_edges_from_csv(graph_filename, filter=filter_map)
+        filter_map = generate_network_filter(filter_filename)
+        edges_list = get_weighted_edges_from_csv(graph_filename, filter=filter_map)
         self.graph = self.generate_graph_from_edges(edges_list)
 
     def generate_graph_from_edges(self, edges_list):
@@ -25,8 +25,8 @@ class GraphToolGraph():
 
 class NetworkXGraph():
     def __init__(self, graph_filename: str, filter_filename="../data/games/metadata/all_games.csv"):
-        filter_map = common.generate_network_filter(filter_filename)
-        edges_list = common.get_weighted_edges_from_csv(graph_filename, filter=filter_map)
+        filter_map = generate_network_filter(filter_filename)
+        edges_list = get_weighted_edges_from_csv(graph_filename, filter=filter_map)
         self.graph = self.generate_graph_from_edges(edges_list)
 
     def generate_graph_from_edges(self, edges_list):
@@ -41,17 +41,9 @@ class NetworkXGraph():
             for node, value in betweenness_centrality.items():
                 openfile.write(f"{node},{value}\n")
 
-def draw_graph_with_vp_ep(graph, vp, ep):
-    gt.graph_draw(graph, vertex_fill_color=vp,
-               vertex_size=prop_to_size(vp, mi=5, ma=15),
-               edge_pen_width=prop_to_size(ep, mi=0.5, ma=5),
-               vcmap=matplotlib.cm.gist_heat,
-               vorder=vp, output="test.pdf")
-
 def main():
-    # GraphToolGraph(graph_filename="../data/too_big/all_games.csv").save_betweenness_centrality(filename="../data/games/network_final/all_games_betweenness_centrality_test.csv")
     # NetworkXGraph(graph_filename="../data/too_big/all_games.csv").save_betweenness_centrality(filename="../data/games/network_final/all_games_betweenness_centrality_test.csv")
-    GraphToolGraph(graph_filename="../data/too_big/all_games.csv").graph
+    GraphToolGraph(graph_filename="../data/too_big/all_games.csv").save_betweenness_centrality(filename="../data/games/network_final/all_games_betweenness_centrality_test.csv")
 
 if __name__ == "__main__":
     main()

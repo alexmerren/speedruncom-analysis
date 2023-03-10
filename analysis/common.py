@@ -8,7 +8,7 @@ FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
 
 def generate_network_filter(filename: str):
-    with open(filename, 'r') as openfile:
+    with open(filename, 'r', encoding='utf-8') as openfile:
         csv_reader = csv.reader(openfile)
         next(csv_reader)
         filter_map = defaultdict(bool)
@@ -28,7 +28,7 @@ def generate_network_filter(filename: str):
     return filter_map
 
 def get_weighted_edges_from_csv(filename, filter=None):
-    with open(filename, 'r') as openfile:
+    with open(filename, 'r', encoding='utf-8') as openfile:
         csv_reader = csv.reader(openfile)
         next(csv_reader)
 

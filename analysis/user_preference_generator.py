@@ -1,9 +1,6 @@
 import csv
 import os
-import requests
-import time
-from analysis import common
-from datetime import datetime
+from common import get, generate_network_filter
 from collections import defaultdict
 
 def generate_user_preferences_from_raw(directory: str, filter=None):
@@ -29,17 +26,26 @@ def write_user_preferences_file(filename: str, users_games: dict[str, set[str]])
     with open(filename, 'w', encoding='utf-8') as openfile:
         openfile.write("user,signup_date,location,games\n")
         for user_id, game_ids in users_games.items():
-            user_data = common.get(f"https://www.speedrun.com/api/v1/users/{user_id}").get("data")
+            games = f"\"{','.join(game_ids)}\""
+
+            
+            user_response = get(f"https://www.speedrun.com/api/v1/users/{user_id}")
+            if user_response == None:
+                openfile.write(f"{user_id},Null,Null,{games}\n")
+                continue
+
+            # Optional data
+            user_data = user_response.get("data")
             country_code = user_data.get("location")
             if country_code is not None:
                 country_code = country_code["country"]["code"]
             signup_date = user_data.get("signup")
-            games = f"\"{','.join(game_ids)}\""
+            
             openfile.write(f"{user_id},{signup_date},{country_code},{games}\n")
 
 def main():
     filter_filename = "../data/games/metadata/all_games.csv"
-    filter_map = common.generate_games_filter(filter_filename)
+    filter_map = generate_network_filter(filter_filename)
 
     related_games_directory = "../data/games/network_raw/"
     users_games = generate_user_preferences_from_raw(related_games_directory, filter=filter_map)
