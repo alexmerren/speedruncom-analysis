@@ -50,7 +50,7 @@ def main():
     related_games_directory = "../data/games/network_raw/"
     users_games = generate_user_preferences_from_raw(related_games_directory, filter=filter_map)
 
-    users_games_filename = "../data/users/test.csv"
+    users_games_filename = "../data/users/user_preferences_with_metadata.csv"
     write_user_preferences_file(users_games_filename, users_games)
 
 if __name__ == "__main__":
