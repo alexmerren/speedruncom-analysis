@@ -1,4 +1,5 @@
 import csv
+import matplotlib
 import graph_tool.all as gt
 from graph_tool.centrality import betweenness
 from common import generate_network_filter, get_weighted_edges_from_csv
@@ -71,6 +72,13 @@ def add_betweenness_centrality_to_graph(graph: gt.Graph, bc_filename: str) -> gt
 
     return graph 
 
+def visualise_graph(graph: gt.Graph):
+    position = gt.sfdp_layout(graph)
+    gt.graph_draw(graph, pos=position, vertex_fill_color=graph.vp.bc,
+               vertex_size=gt.prop_to_size(graph.vp.bc, mi=5, ma=15),
+               vcmap=matplotlib.cm.gist_heat,
+               vorder=graph.vp.bc, output="test.pdf")
+
 def main():
     # This is how we load from a CSV file and save to a graphml file.
     # graph = load_graph_from_csv("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
@@ -78,6 +86,7 @@ def main():
     # save_graph_to_file(graph, "../data/too_big/testgraph.graphml")
 
     graph = gt.load_graph("../data/too_big/test.graphml")
+    visualise_graph(graph)
 
 if __name__ == "__main__":
     main()
