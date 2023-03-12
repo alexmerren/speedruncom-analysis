@@ -16,7 +16,21 @@ requests_c = CachedSession(
         backend='sqlite',
         expire_after=None)
 
-def generate_network_filter(filename: str):
+def generate_network_filter(filename: str) -> dict[str, bool]:
+    """Create a dictionary containing the games that we want to include in further analysis.
+    
+    We check if a game was released/created before the cutoff date, and if the
+    game is in a disallowed games list. If the answer to both of these
+    questions is no, then we want to include it in our analysis.
+
+    Args:
+        filename (str): The name of the games metadata file.
+
+    Returns:
+        A dictionary of game ID to boolean. If the game is allowed True, if not False.
+
+    """
+
     with open(filename, 'r', encoding='utf-8') as openfile:
         csv_reader = csv.reader(openfile)
         next(csv_reader)
@@ -36,7 +50,18 @@ def generate_network_filter(filename: str):
 
     return filter_map
 
-def get_weighted_edges_from_csv(filename, filter=None):
+def get_weighted_edges_from_csv(filename, filter=None) -> list[tuple[str, str, int]]:
+    """Create a list of edges with structure `node1,node2,weight`.
+
+    Args:
+        filename (str): The filename containing a list of edges.
+        filter (dict[str, bool]): The filter of which games to allow.
+
+    Returns:
+        A list of tuples of edges and their weights.
+
+    """
+
     with open(filename, 'r', encoding='utf-8') as openfile:
         csv_reader = csv.reader(openfile)
         next(csv_reader)
@@ -55,6 +80,20 @@ def get_weighted_edges_from_csv(filename, filter=None):
     return edges
 
 def get(uri: str):
+    """Get request a URI.
+
+    Run requests through a requests cache defined above. If response code is
+    404 or 400, then return None. If response code is 420 or 504, then retry
+    after timeout.
+
+    Args:
+        uri (str): The URL of a resource.
+
+    Returns:
+        JSON of a response body.
+
+    """
+
     print(uri)
     response = requests_c.get(uri)
     if response.status_code in [404,400]:
