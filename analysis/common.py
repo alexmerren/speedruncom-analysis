@@ -3,9 +3,18 @@ import requests
 import time
 from datetime import datetime
 from collections import defaultdict
+from requests_cache import CachedSession
 
 FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
+
+REQUEST_CACHE_NAME = "user_preference_cache"
+REQUEST_TIMEOUT_SLEEP = 2
+
+requests_c = CachedSession(
+        REQUEST_CACHE_NAME, 
+        backend='sqlite',
+        expire_after=None)
 
 def generate_network_filter(filename: str):
     with open(filename, 'r', encoding='utf-8') as openfile:
@@ -47,7 +56,7 @@ def get_weighted_edges_from_csv(filename, filter=None):
 
 def get(uri: str):
     print(uri)
-    response = requests.get(uri)
+    response = requests_c.get(uri)
     if response.status_code in [404,400]:
         print(f"({response.status_code}) {response.reason}: Exiting. {response.json()=}")
         return None

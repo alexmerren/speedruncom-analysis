@@ -22,16 +22,16 @@ def generate_user_preferences_from_raw(directory: str, filter=None):
 
     return users_games
 
-def write_user_preferences_file(filename: str, users_games: dict[str, set[str]]):
+def write_user_preferences_file(filename: str, users_games: dict[str, set[str]], start_index=0):
     with open(filename, 'w', encoding='utf-8') as openfile:
-        openfile.write("user,signup_date,location,games\n")
+        openfile.write("user,signup_date,location,num_games,games\n")
         for user_id, game_ids in users_games.items():
             games = f"\"{','.join(game_ids)}\""
 
             
             user_response = get(f"https://www.speedrun.com/api/v1/users/{user_id}")
             if user_response == None:
-                openfile.write(f"{user_id},Null,Null,{games}\n")
+                openfile.write(f"{user_id},Null,Null,{len(game_ids)},{games}\n")
                 continue
 
             # Optional data
@@ -41,7 +41,7 @@ def write_user_preferences_file(filename: str, users_games: dict[str, set[str]])
                 country_code = country_code["country"]["code"]
             signup_date = user_data.get("signup")
             
-            openfile.write(f"{user_id},{signup_date},{country_code},{games}\n")
+            openfile.write(f"{user_id},{signup_date},{country_code},{len(game_ids)},{games}\n")
 
 def main():
     filter_filename = "../data/games/metadata/all_games.csv"
@@ -50,7 +50,7 @@ def main():
     related_games_directory = "../data/games/network_raw/"
     users_games = generate_user_preferences_from_raw(related_games_directory, filter=filter_map)
 
-    users_games_filename = "../data/users/user_preferences_with_metadata.csv"
+    users_games_filename = "../data/users/test.csv"
     write_user_preferences_file(users_games_filename, users_games)
 
 if __name__ == "__main__":
