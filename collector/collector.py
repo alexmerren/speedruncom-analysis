@@ -464,16 +464,18 @@ class Collector:
 
                 openfile.write(f"{game_id},{game_name},{developers},{release_date},{created_date},{num_categories},{num_levels},{num_runs},{num_users},{num_guests}\n")
 
-    def collect_all_related_games_data(self, percentage_limit=1.0):
+    def collect_all_related_games_data(self, percentage_limit=1.0, filter_filename="data/games/metadata/all_games.csv"):
         """Collate all the data from `data/games/network_raw/` into a single file.
 
         Searches through the `data/games/network_raw/` directory for all the
-        files ending in `.csv`. Writes to a file named in the self.filename
+        files ending in `.csv`. Writes to a file named in the `self.filename`
         attribute. Creates a csv with a `source,target,value` structure. This
-        function also removes edges that are self-referential.
+        function filters the raw network data, using the metadata file found 
+        in `data/games/metadata/all_games.csv`
 
         Args:
             percentage_limit (float): A percentage of the files in the `data/games/network_raw/` directory to be parsed.
+            filter_filename (str): A filename containing the created dates of games to create a filter of the games included in the analysis.
 
         """
 
@@ -496,9 +498,25 @@ class Collector:
                         continue
                     sourcetarget = ' '.join([row[0],row[2]])
                     sourcetarget_to_number[sourcetarget] += 1
-                    
-        print(len(sourcetarget_to_number))
 
+        filter_map = defaultdict(bool)
+        with open(filter_filename, 'r', encoding='utf-8') as openfile:
+            csv_reader = csv.reader(openfile)
+            next(csv_reader)
+            
+            for row in csv_reader:
+                # Check if the created/release date is after 2023, if it is then we can ignore it in the network.
+                release_date = datetime.strptime(row[3], "%Y-%m-%d")
+                if row[4] == "None":
+                    row[4] = "2017-10-22T05:21:29Z" # This is a completely random date before the final date.
+                created_date = datetime.strptime(row[4], "%Y-%m-%dT%H:%M:%SZ")
+
+                disallowed_games = ["y65797de"]
+
+                if created_date < FINAL_DATE and release_date < FINAL_DATE and \
+                    row[0] not in disallowed_games and row[1] not in disallowed_games:
+                    filter_map[row[0]] = True
+                    
         with open(self.filename, 'w', encoding='utf-8') as openfile:
             openfile.write("source,target,value")
             for key, value in sourcetarget_to_number.items():
@@ -506,6 +524,9 @@ class Collector:
                 source = split_key[0]
                 target = split_key[1]
                 if source == target:
+                    continue
+
+                if not filter_map.get(source) or not filter_map.get(target):
                     continue
 
                 openfile.write(f"{source},{target},{value}\n")
