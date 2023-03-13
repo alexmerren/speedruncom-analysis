@@ -162,7 +162,7 @@ class Collector:
     def __init__(self, base: collector_base.CollectorBase, filename: str, debug=0):
         self.base = base
         self.debug = debug
-        self.filename = escape_filename(filename)
+        self.filename = filename
 
     def record_history_game_category(self, game_id: str, category_id: str, start_date=None, end_date=FINAL_DATE):
         """ Get the record history from release until cutoff date for a category of a game.
@@ -500,6 +500,7 @@ class Collector:
         print(len(sourcetarget_to_number))
 
         with open(self.filename, 'w', encoding='utf-8') as openfile:
+            openfile.write("source,target,value")
             for key, value in sourcetarget_to_number.items():
                 split_key = key.split(' ')
                 source = split_key[0]
@@ -526,5 +527,6 @@ def escape_filename(name: str) -> str:
     for character in ["/", "<", ">", ":", "\"", "/", "\\", "|", "*", "?"]:
         if character in name:
             name = name.replace(character, "", -1)
-
+    
+    name = name.replace(" ", "_", -1)
     return name
