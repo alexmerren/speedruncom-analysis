@@ -3,7 +3,7 @@ import matplotlib
 
 import graph_tool.all as gt
 
-from graph_tool.centrality import betweenness
+from graph_tool.centrality import betweenness, pagerank, hits, closeness, eigenvector
 from datetime import datetime
 from collections import defaultdict
 
@@ -179,7 +179,7 @@ def save_pagerank_to_file(graph: gt.Graph, filename: str):
 
     print(graph.get_vertices().shape[0], graph.get_edges().shape[0])
     vertex_pagerank = graph.new_vertex_property("double")
-    pagerank(graph, vprop=vertex_pagerank, weight=graph.ep.weight)
+    pagerank(graph, prop=vertex_pagerank, weight=graph.ep.weight)
 
     with open(filename, 'w', encoding='utf-8') as openfile:
         openfile.write("id,value\n")
@@ -234,7 +234,6 @@ def main():
     save_pagerank_to_file(graph, "../data/games/network_final/all_games_pagerank.csv")
     save_hits_centrality_to_file(graph, "../data/games/network_final/all_games_hits_centrality.csv")
     save_closeness_centrality_to_file(graph, "../data/games/network_final/all_games_closeness_centrality.csv")
-
 
 if __name__ == "__main__":
     main()
