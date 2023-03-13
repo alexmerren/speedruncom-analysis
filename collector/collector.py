@@ -518,7 +518,7 @@ class Collector:
                     filter_map[row[0]] = True
                     
         with open(self.filename, 'w', encoding='utf-8') as openfile:
-            openfile.write("source,target,value")
+            openfile.write("source,target,value\n")
             for key, value in sourcetarget_to_number.items():
                 split_key = key.split(' ')
                 source = split_key[0]
