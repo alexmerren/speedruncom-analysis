@@ -6,7 +6,7 @@ This repository contains all the information related to the final project of my 
 
 This repository is comprised of three main parts: data collection, data analysis, and the data itself. These are logically separated into the directories [collection](collector/), [analysis](analysis/), and [data](data/) respectively.
 
-The data can be found in the [data](data/) directory. In this, we can find the [games metadata](data/games/metadata/), the [other games users play](data/games/network_final/), and the [world record history](data/games/world_record_history/) for each game. Some functions will need a directory called `data/too_big/`. These files are too big to be uploaded to GitHub, and need to be re-generated each time.
+The data can be found in the [data](data/) directory. In this, we can find the [games metadata](data/games/metadata/), the [other games users play](data/games/network/), and the [world record history](data/games/world_record_history/) for each game. Some functions will need a directory called `data/too_big/`. These files are too big to be uploaded to GitHub, and need to be re-generated each time.
 
 ## Contents
 

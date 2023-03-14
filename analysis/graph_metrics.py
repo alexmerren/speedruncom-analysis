@@ -10,7 +10,7 @@ from collections import defaultdict
 FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
 
-def generate_network_filter(filename: str) -> dict[str, bool]:
+def generate_network_filter(filename: str, disallowed_games=None) -> dict[str, bool]:
     """Create a dictionary containing the games that we want to include in further analysis.
     
     We check if a game was released/created before the cutoff date, and if the
@@ -36,10 +36,10 @@ def generate_network_filter(filename: str) -> dict[str, bool]:
                 row[4] = "2017-10-22T05:21:29Z" # This is a completely random date before the final date.
             created_date = datetime.strptime(row[4], "%Y-%m-%dT%H:%M:%SZ")
 
-            disallowed_games = ["y65797de"]
-
-            if created_date < FINAL_DATE and release_date < FINAL_DATE and \
-                row[0] not in disallowed_games and row[1] not in disallowed_games:
+            if disallowed_games == None:
+                disallowed_games = ["y65797de"]
+        
+            if created_date < FINAL_DATE and release_date < FINAL_DATE and row[0] not in disallowed_games:
                 filter_map[row[0]] = True
 
     return filter_map
@@ -224,16 +224,10 @@ def visualise_graph(graph: gt.Graph):
                vorder=graph.vp.prop, output="test.pdf")
 
 def main():
-    # This is how we load from a CSV file and save to a graphml file.
-    # graph = load_graph_from_csv("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
-    # graph = add_property_to_graph_from_file(graph, "../data/games/network_final/all_games_betweenness_centrality.csv")
-    # save_graph_to_file(graph, "../data/too_big/testgraph.graphml")
-    # print(graph.get_vertices().shape[0],graph.get_edges().shape[0])
-
     graph = load_graph_from_csv("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
-    save_pagerank_to_file(graph, "../data/games/network_final/all_games_pagerank.csv")
-    save_hits_centrality_to_file(graph, "../data/games/network_final/all_games_hits_centrality.csv")
-    save_closeness_centrality_to_file(graph, "../data/games/network_final/all_games_closeness_centrality.csv")
+    save_pagerank_to_file(graph, "../data/games/network/all_games_pagerank.csv")
+    save_hits_centrality_to_file(graph, "../data/games/network/all_games_hits_centrality.csv")
+    save_closeness_centrality_to_file(graph, "../data/games/network/all_games_closeness_centrality.csv")
 
 if __name__ == "__main__":
     main()
