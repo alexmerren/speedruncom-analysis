@@ -135,7 +135,7 @@ class CollatedWorldRecordHistoryCollector:
     def __init__(self, name: str, debug=0) -> None:
         base = collector_base.CollectorBase(debug=debug)
         self.debug = debug
-        self.api = Collector(base, f"data/jorld_record_history/{name}.csv", debug=debug) 
+        self.api = Collector(base, f"data/world_record_history/{name}.csv", debug=debug) 
 
     def run(self, game_start_index=0, start_date=None, end_date=FINAL_DATE) -> None:
         self.api.get_world_record_history_for_all_games(game_start_index, start_date, end_date)   
