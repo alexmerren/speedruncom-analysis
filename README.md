@@ -32,3 +32,6 @@ There are three main analysis files:
  * [Srcomapi Package](https://github.com/blha303/srcomapi)
  * [Requests-cache Documentation](https://github.com/requests-cache/requests-cache)
  * [Graph-tool Documentation](https://graph-tool.skewed.de/static/doc/index.html)
+ * [PecanPy Documentation](https://pecanpy.readthedocs.io/en/latest/)
+ * [Sklearn Documentation](https://scikit-learn.org/stable/)
+ * [Networkx Documentation](https://networkx.org/documentation/stable/index.html)
