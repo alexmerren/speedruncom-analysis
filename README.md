@@ -1,34 +1,34 @@
-# Final Project Data Collection & Data Analysis
+# Analysing the Communities of Speedrun.com
 
-This repository is the centre of the data collection and data analysis for the
-final project of my undergraduate degree. My aim of this repository is to
-encapsulate the logic for data collection and analysis. All the data in this
-repository is from [speedrun.com](https://www.speedrun.com) and analysing it
-using machine learning techniques (specifics TBD).
+![](https://www.speedrun.com/images/logo-white.png)
 
-## How does this work?
+This repository contains all the information related to the final project of my undergraduate degree. 
 
-This repository is split into four logical directories:
-* [Data](/data) - The repository of all the formatted data that I have collected.
-* [Analysing](/notebook) - A repository for the Jupyter Notebooks or other analysis programs.
-* [Data Collector](/collector) - Code wrapping srcomapi for requests, and custom formatting into the data repository.
-* [Srcomapi module](/srcomapi) - A wrapper for the speedrun.com API created by
-  [blha303](https://github.com/blha303). There are some customisations made
-  here, such as request caching.
+This repository is comprised of three main parts: data collection, data analysis, and the data itself. These are logically separated into the directories [collection](collector/), [analysis](analysis/), and [data](data/) respectively.
 
-## Usage
+The data can be found in the [data](data/) directory. In this, we can find the [games metadata](data/games/metadata/), the [other games users play](data/games/network/), and the [world record history](data/games/world_record_history/) for each game. Some functions will need a directory called `data/too_big/`. These files are too big to be uploaded to GitHub, and need to be re-generated each time.
 
-It's probably best to use your own scripts that wrap the srcomapi package, but
-the [data](/data) may be useful.
+## Contents
 
-## Thanks
+ * [Documentation](#documentation)
+ * [Internal References](#internal-references)
+ * [External References](#external-references)
 
-A big thank you to [blha303](https://github.com/blha303) for creating the
-[srcomapi repository](https://github.com/blha303/srcomapi). It has saved me
-countless hours creating my own wrapper for the API, you have my thanks!
+## Documentation
 
-## References
+All functions within the analysis and collector directories are documented. I'm still researching on how I can publish this documentation easily.
 
- * [Speedrun.com API reference](https://github.com/speedruncomorg)
- * [Srcomapi package](https://github.com/blha303/srcomapi)
- * [Request-cache package](https://github.com/requests-cache/requests-cache)
+## Internal References
+
+There are three main analysis files:
+
+ * [Network Analysis](analysis/notebooks/Network_Analysis.ipynb)
+ * [Exploratory Analysis](analysis/notebooks/Exploratory_Analysis.ipynb)
+ * [User Preference Generator](analysis/user_preference_generator.py)
+
+## External References
+
+ * [Speedrun.com API Documentation](https://github.com/speedruncomorg)
+ * [Srcomapi Package](https://github.com/blha303/srcomapi)
+ * [Requests-cache Documentation](https://github.com/requests-cache/requests-cache)
+ * [Graph-tool Documentation](https://graph-tool.skewed.de/static/doc/index.html)
