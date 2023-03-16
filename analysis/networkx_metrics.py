@@ -88,12 +88,13 @@ def find_louvain_communities(graph: nx.DiGraph, output_filename: str):
             for node_id in community:
                 openfile.write(f"{node_id},{community_index}\n")
 
-def create_node_to_cluster_map(community_filename: str) -> dict[str, int]:
-    csv_reader = csv.reader(community_filename)
-    next(csv_reader)
-    node_to_cluster = defaultdict(int)
-    for row in csv_reader:
-        node_to_cluster[row[0]] = int(row[1])
+def create_node_to_cluster_map(communities_filename: str) -> dict[str, int]:
+    with open(communities_filename, 'r', encoding='utf-8') as openfile:
+        csv_reader = csv.reader(openfile)
+        next(csv_reader)
+        node_to_cluster = defaultdict(int)
+        for row in csv_reader:
+            node_to_cluster[row[0]] = int(row[1])
     return node_to_cluster
 
 
@@ -107,8 +108,8 @@ def save_weighted_graph(g: nx.DiGraph, filename: str):
 
 def create_meta_graph(graph: nx.DiGraph, node_to_cluster_map: dict[str, int]) -> nx.DiGraph:
     source_target_number = defaultdict(int)
-    for source,target in graph.edges():
-        key = node_to_cluster_map[source] + ' ' + node_to_cluster_map[target]
+    for source, target in graph.edges():
+        key = str(node_to_cluster_map[source]) + ' ' + str(node_to_cluster_map[target])
         source_target_number[key] += 1
     
     meta_graph = nx.DiGraph()
@@ -125,7 +126,7 @@ def main():
     louvain_communities_filename = "../data/games/network/louvain_communities.csv"
     node_to_cluster = create_node_to_cluster_map(louvain_communities_filename)
     meta_graph = create_meta_graph(graph, node_to_cluster)
-    save_weighted_graph(meta_graph)
+    save_weighted_graph(meta_graph, "../data/too_big/meta_all_games.csv")
 
 if __name__ == "__main__":
     main()
