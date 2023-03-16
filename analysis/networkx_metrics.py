@@ -117,6 +117,8 @@ def create_meta_graph(graph: nx.DiGraph, node_to_cluster_map: dict[str, int]) ->
         split_connection = connection.split(' ')
         source = split_connection[0]
         target = split_connection[1]
+        if source == target:
+            continue
         meta_graph.add_edge(source, target, weight=weight)
         
     return meta_graph
@@ -126,7 +128,7 @@ def main():
     louvain_communities_filename = "../data/games/network/louvain_communities.csv"
     node_to_cluster = create_node_to_cluster_map(louvain_communities_filename)
     meta_graph = create_meta_graph(graph, node_to_cluster)
-    save_weighted_graph(meta_graph, "../data/too_big/meta_all_games.csv")
+    save_weighted_graph(meta_graph, "../data/games/network/meta_all_games.csv")
 
 if __name__ == "__main__":
     main()
