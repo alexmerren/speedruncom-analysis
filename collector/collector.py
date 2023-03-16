@@ -65,7 +65,7 @@ class RelatedGamesInformationCollater:
         name = escape_filename(name)
         self.api = Collector(base, f"data/too_big/{name}.csv")
 
-    def run(self, percentage_limit: float):
+    def run(self, percentage_limit: float, doFilter=True):
         """Start the collation process of writing to file with an optional percentage limit.
         
         Args:
@@ -73,7 +73,7 @@ class RelatedGamesInformationCollater:
 
         """
         
-        self.api.collect_all_related_games_data(percentage_limit=percentage_limit)
+        self.api.collect_all_related_games_data(percentage_limit=percentage_limit, doFilter=doFilter)
 
 class MultipleRelatedGamesCollector:
     """A class for collecting users' played games for several games. 
@@ -464,7 +464,7 @@ class Collector:
 
                 openfile.write(f"{game_id},{game_name},{developers},{release_date},{created_date},{num_categories},{num_levels},{num_runs},{num_users},{num_guests}\n")
 
-    def collect_all_related_games_data(self, percentage_limit=1.0, filter_filename="data/games/metadata/all_games.csv"):
+    def collect_all_related_games_data(self, percentage_limit=1.0, filter_filename="data/games/metadata/all_games.csv", doFilter=True):
         """Collate all the data from `data/games/network_raw/` into a single file.
 
         Searches through the `data/games/network_raw/` directory for all the
@@ -499,6 +499,7 @@ class Collector:
                     sourcetarget = ' '.join([row[0],row[2]])
                     sourcetarget_to_number[sourcetarget] += 1
 
+        
         filter_map = defaultdict(bool)
         with open(filter_filename, 'r', encoding='utf-8') as openfile:
             csv_reader = csv.reader(openfile)
@@ -526,7 +527,7 @@ class Collector:
                 if source == target:
                     continue
 
-                if not filter_map.get(source) or not filter_map.get(target):
+                if doFilter and (not filter_map.get(source) or not filter_map.get(target)):
                     continue
 
                 openfile.write(f"{source},{target},{value}\n")
