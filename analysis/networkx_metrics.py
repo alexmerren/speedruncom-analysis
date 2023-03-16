@@ -88,6 +88,14 @@ def find_louvain_communities(graph: nx.DiGraph, output_filename: str):
             for node_id in community:
                 openfile.write(f"{node_id},{community_index}\n")
 
+def find_greedy_modularity_communities(graph: nx.DiGraph, output_filename: str):
+    communities = nx_comm.greedy_modularity_communities(graph)
+    with open(output_filename, 'w', encoding='utf-8') as openfile:
+        openfile.write('node_id,community_num\n')
+        for community_index, community in enumerate(communities):
+            for node_id in community:
+                openfile.write(f"{node_id},{community_index}\n")
+
 def create_node_to_cluster_map(communities_filename: str) -> dict[str, int]:
     with open(communities_filename, 'r', encoding='utf-8') as openfile:
         csv_reader = csv.reader(openfile)
@@ -125,10 +133,8 @@ def create_meta_graph(graph: nx.DiGraph, node_to_cluster_map: dict[str, int]) ->
 
 def main():
     graph = create_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
-    louvain_communities_filename = "../data/games/network/louvain_communities.csv"
-    node_to_cluster = create_node_to_cluster_map(louvain_communities_filename)
-    meta_graph = create_meta_graph(graph, node_to_cluster)
-    save_weighted_graph(meta_graph, "../data/games/network/meta_all_games.csv")
+    greedy_communities_filename = "../data/games/network/greedy_modularity_communities.csv"
+    find_greedy_modularity_communities(graph, greedy_communities_filename)
 
 if __name__ == "__main__":
     main()
