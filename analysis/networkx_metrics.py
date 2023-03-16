@@ -73,14 +73,14 @@ def get_weighted_edges_from_csv(filename: str, filter=None) -> list[tuple[str, s
 
     return edges
 
-def create_nx_graph(graph_filename: str, filter_filename: str):
+def create_graph(graph_filename: str, filter_filename: str):
     filter_map = generate_network_filter(filter_filename)
     edgelist = get_weighted_edges_from_csv(graph_filename, filter_map)
     graph = nx.DiGraph()
     graph.add_weighted_edges_from(edgelist)
     return graph
 
-def find_communities_nx(graph: nx.DiGraph, output_filename: str):
+def find_louvain_communities(graph: nx.DiGraph, output_filename: str):
     communities = nx_comm.louvain_communities(graph, seed=0)
     with open(output_filename, 'w', encoding='utf-8') as openfile:
         openfile.write('node_id,community_num\n')
@@ -88,9 +88,44 @@ def find_communities_nx(graph: nx.DiGraph, output_filename: str):
             for node_id in community:
                 openfile.write(f"{node_id},{community_index}\n")
 
+def create_node_to_cluster_map(community_filename: str) -> dict[str, int]:
+    csv_reader = csv.reader(community_filename)
+    next(csv_reader)
+    node_to_cluster = defaultdict(int)
+    for row in csv_reader:
+        node_to_cluster[row[0]] = int(row[1])
+    return node_to_cluster
+
+
+def save_weighted_graph(g: nx.DiGraph, filename: str):
+    with open(filename, 'w', encoding='utf-8') as openfile:
+        openfile.write("Source,Target,Weight\n")
+        for source,target,data in g.edges(data=True):
+            weight = int(data['weight'])
+            output_string = ','.join(map(str, [source, target, weight]))
+            openfile.write(f"{output_string}\n")
+
+def create_meta_graph(graph: nx.DiGraph, node_to_cluster_map: dict[str, int]) -> nx.DiGraph:
+    source_target_number = defaultdict(int)
+    for source,target in graph.edges():
+        key = node_to_cluster_map[source] + ' ' + node_to_cluster_map[target]
+        source_target_number[key] += 1
+    
+    meta_graph = nx.DiGraph()
+    for connection, weight in source_target_number.items():
+        split_connection = connection.split(' ')
+        source = split_connection[0]
+        target = split_connection[1]
+        meta_graph.add_edge(source, target, weight=weight)
+        
+    return meta_graph
+
 def main():
-    graph = create_nx_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
-    find_communities_nx(graph, "../data/games/network/louvain_communities.csv")
+    graph = create_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
+    louvain_communities_filename = "../data/games/network/louvain_communities.csv"
+    node_to_cluster = create_node_to_cluster_map(louvain_communities_filename)
+    meta_graph = create_meta_graph(graph, node_to_cluster)
+    save_weighted_graph(meta_graph)
 
 if __name__ == "__main__":
     main()
