@@ -6,6 +6,7 @@ import networkx.algorithms.community as nx_comm
 
 from datetime import datetime
 from collections import defaultdict
+from cdlib import algorithms
 
 FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
@@ -73,12 +74,57 @@ def get_weighted_edges_from_csv(filename: str, filter=None) -> list[tuple[str, s
 
     return edges
 
-def create_graph(graph_filename: str, filter_filename: str):
+
+def get_edges_from_csv(filename: str, filter=None) -> list[tuple[str, str]]:
+    """Create a list of edges with structure `node1,node2,weight`.
+
+    Args:
+        filename (str): The filename containing a list of edges.
+        filter (dict[str, bool]): The filter of which games to allow.
+
+    Returns:
+        A list of tuples of edges and their weights.
+
+    """
+
+    with open(filename, 'r', encoding='utf-8') as openfile:
+        csv_reader = csv.reader(openfile)
+        next(csv_reader)
+
+        edges = list()
+        for row in csv_reader:
+            if filter is None:
+                edges.append(tuple([row[0], row[1]]))
+                continue
+
+            if not filter.get(row[0]) or not filter.get(row[1]):
+                continue
+
+            edges.append(tuple([row[0], row[1]]))
+
+    return edges
+
+def create_weighted_graph(graph_filename: str, filter_filename: str):
     filter_map = generate_network_filter(filter_filename)
     edgelist = get_weighted_edges_from_csv(graph_filename, filter_map)
     graph = nx.DiGraph()
     graph.add_weighted_edges_from(edgelist)
     return graph
+
+def create_graph(graph_filename: str, filter_filename: str):
+    filter_map = generate_network_filter(filter_filename)
+    edgelist = get_edges_from_csv(graph_filename, filter_map)
+    graph = nx.DiGraph()
+    graph.add_edges_from(edgelist)
+    return graph
+
+def find_infomap_communities(graph: nx.DiGraph, output_filename: str):
+    communities = algorithms.infomap(graph).communities
+    with open(output_filename, 'w', encoding='utf-8') as openfile:
+        openfile.write('node_id,community_num\n')
+        for community_index, community in enumerate(communities):
+            for node_id in community:
+                openfile.write(f"{node_id},{community_index}\n")
 
 def find_louvain_communities(graph: nx.DiGraph, output_filename: str):
     communities = nx_comm.louvain_communities(graph, seed=0)
@@ -133,8 +179,9 @@ def create_meta_graph(graph: nx.DiGraph, node_to_cluster_map: dict[str, int]) ->
 
 def main():
     graph = create_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
-    greedy_communities_filename = "../data/games/network/greedy_modularity_communities.csv"
-    find_greedy_modularity_communities(graph, greedy_communities_filename)
+    find_louvain_communities(graph, "../data/games/network/louvain_noweight_communities.csv")
+    find_greedy_modularity_communities(graph, "../data/games/network/greedy_modular_noweight_communities.csv")
+    find_infomap_communities(graph, "../data/games/network/infomap_noweight_communities.csv")
 
 if __name__ == "__main__":
     main()
