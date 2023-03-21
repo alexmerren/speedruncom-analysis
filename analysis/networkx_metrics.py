@@ -1,8 +1,11 @@
 import csv
-import matplotlib
+import scipy
+import random
 
 import networkx as nx
+import pandas as pd
 import networkx.algorithms.community as nx_comm
+import tqdm as tqdm
 
 from datetime import datetime
 from collections import defaultdict
@@ -177,11 +180,51 @@ def create_meta_graph(graph: nx.DiGraph, node_to_cluster_map: dict[str, int]) ->
         
     return meta_graph
 
+
+def generate_adjacency_matrix(graph: nx.DiGraph):
+    return nx.adjacency_matrix(graph, list(graph.nodes()))
+
+
+def generate_non_existing_edges(adj_graph: scipy.sparse.csr_matrix, node_list: list[str], number_samples: int):
+    non_existing_edges = []
+    offset = 0
+    for i in tqdm(range(adj_graph.shape[0])):
+        for j in range(offset, adj_graph.shape[1]):
+            if i != j:
+                if adj_graph[i, j] == 0:
+                    non_existing_edges.extend([node_list[i], node_list[j]])
+
+        offset += 1
+    return sorted(random.sample(non_existing_edges, k=number_samples))
+
+
+def get_removable_edges(graph: nx.DiGraph):
+    number_conected_components = nx.number_weakly_connected_components(graph)
+    number_nodes = len(graph.nodes())
+    tmp_graph = graph.copy()
+    removable_edges = []
+    for i in tqdm(list(tmp_graph.edges())):
+        tmp_graph.remove_edge(i)
+
+        if nx.number_weakly_connected_components(tmp_graph) == number_conected_components and \
+                len(tmp_graph.nopdes()) == number_nodes:
+            removable_edges.append(i)
+            continue
+
+        tmp_graph.add_edge(i)
+    return removable_edges
+
 def main():
     graph = create_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
-    find_louvain_communities(graph, "../data/games/network/louvain_noweight_communities.csv")
-    find_greedy_modularity_communities(graph, "../data/games/network/greedy_modular_noweight_communities.csv")
-    find_infomap_communities(graph, "../data/games/network/infomap_noweight_communities.csv")
+    adj_graph = scipy.sparse.load_npz('../data/games/network/all_games_adjacency_matrix.npz')
+    non_existing_edges = generate_non_existing_edges(adj_graph, list(graph.nodes()), 4000)
+    non_existing_edges_df = pd.DataFrame(data=non_existing_edges, columns=['source', 'target'])
+    non_existing_edges_df['connection'] = 0
+    removable_edges = get_removable_edges(graph)
+    removable_edges_df = pd.DataFrame(data=removable_edges, columns=['source', 'target'])
+    removable_edges_df['connection'] = 1
+    dataset = non_existing_edges_df.append(removable_edges_df, ignore_index=True)
+    dataset.to_csv('../data/games/network/edge_existence_dataset.csv')
 
 if __name__ == "__main__":
     main()
