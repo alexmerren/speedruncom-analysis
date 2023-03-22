@@ -107,14 +107,14 @@ def get_edges_from_csv(filename: str, filter=None) -> list[tuple[str, str]]:
 
     return edges
 
-def create_weighted_graph(graph_filename: str, filter_filename: str):
+def create_weighted_games_graph(graph_filename: str, filter_filename: str):
     filter_map = generate_network_filter(filter_filename)
     edgelist = get_weighted_edges_from_csv(graph_filename, filter_map)
     graph = nx.DiGraph()
     graph.add_weighted_edges_from(edgelist)
     return graph
 
-def create_graph(graph_filename: str, filter_filename: str):
+def create_games_graph(graph_filename: str, filter_filename: str):
     filter_map = generate_network_filter(filter_filename)
     edgelist = get_edges_from_csv(graph_filename, filter_map)
     graph = nx.DiGraph()
@@ -153,7 +153,6 @@ def create_node_to_cluster_map(communities_filename: str) -> dict[str, int]:
         for row in csv_reader:
             node_to_cluster[row[0]] = int(row[1])
     return node_to_cluster
-
 
 def save_weighted_graph(g: nx.DiGraph, filename: str):
     with open(filename, 'w', encoding='utf-8') as openfile:
@@ -212,8 +211,8 @@ def get_removable_edges(graph: nx.DiGraph):
         tmp_graph.add_edge(*i)
     return removable_edges
 
-def main():
-    graph = create_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
+def generate_removable_edges_data():
+    graph = create_games_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
     adj_graph = nx.to_numpy_matrix(graph, nodelist = list(graph.nodes()))
     non_existing_edges = generate_non_existing_edges(graph, adj_graph, list(graph.nodes()), 4000)
     non_existing_edges_df = pd.DataFrame(data=non_existing_edges, columns=['source', 'target'])
@@ -223,6 +222,39 @@ def main():
     removable_edges_df['connection'] = 1
     dataset = non_existing_edges_df.append(removable_edges_df, ignore_index=True)
     dataset.to_csv('../data/games/network/edge_existence_dataset.csv')
+
+def format_user_preferences_df(df: pd.DataFrame) -> pd.DataFrame:
+    user_prefs_df = user_prefs_df[(user_prefs_df['signup_date'].notna()) & (user_prefs_df['signup_date'] != "Null")]
+    user_prefs_df['signup_date'] = pd.to_datetime(user_prefs_df['signup_date'], format='%Y-%m-%dT%H:%M:%SZ')
+    user_prefs_df['signup_date'] = pd.to_datetime(user_prefs_df['signup_date'].dt.strftime('%Y-%m-%d'))
+    user_prefs_df = user_prefs_df[(user_prefs_df['signup_date'] < '2023-01-01')]
+    return user_prefs_df
+
+def explode_user_preferences_df(df: pd.DataFrame) -> pd.DataFrame:
+    exploded_games_df = df.copy()
+    exploded_games_df['games'] = exploded_games_df['games'].str.split(',')
+    exploded_games_df = exploded_games_df.explode('games').rename(columns = {'games': 'game_id', 'user':'user_id'})[['user_id', 'game_id']]
+    return exploded_games_df
+
+def create_bipartite_user_graph(df: pd.DataFrame) -> nx.Graph:
+    bipartite_graph = nx.Graph()
+    bipartite_graph.add_nodes_from(set(df['user_id'].values), bipartite=0)
+    bipartite_graph.add_nodes_from(set(df['game_id'].values), bipartite=1)
+    bipartite_graph.add_edges_from([(user, game) for user, game in zip(df['user_id'], df['game_id'])])
+    assert nx.is_bipartite(bipartite_graph)
+    return bipartite_graph
+
+def generate_communities_for_bipartite_user_graph():
+    user_prefs_df = pd.read_csv("../data/users/user_preferences_with_metadata.csv")
+    user_prefs_df = format_user_preferences_df(user_prefs_df)
+    user_prefs_df = explode_user_preferences_df(user_prefs_df)
+    bipartite_graph = create_bipartite_user_graph(user_prefs_df)
+    find_louvain_communities(bipartite_graph, "../data/users/louvain_communities.csv")
+    find_greedy_modularity_communities(bipartite_graph, "../data/users/greedy_modularity_communities.csv")
+    find_infomap_communities(bipartite_graph, "../data/users/infomap_communities.csv")
+
+def main():
+    generate_communities_for_bipartite_user_graph()
 
 if __name__ == "__main__":
     main()
