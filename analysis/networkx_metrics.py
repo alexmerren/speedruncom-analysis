@@ -5,11 +5,11 @@ import random
 import networkx as nx
 import pandas as pd
 import networkx.algorithms.community as nx_comm
-import tqdm as tqdm
 
 from datetime import datetime
 from collections import defaultdict
 from cdlib import algorithms
+from tqdm import tqdm
 
 FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
@@ -180,44 +180,42 @@ def create_meta_graph(graph: nx.DiGraph, node_to_cluster_map: dict[str, int]) ->
         
     return meta_graph
 
-
 def generate_adjacency_matrix(graph: nx.DiGraph):
     return nx.adjacency_matrix(graph, list(graph.nodes()))
 
-
-def generate_non_existing_edges(adj_graph: scipy.sparse.csr_matrix, node_list: list[str], number_samples: int):
+def generate_non_existing_edges(graph: nx.DiGraph, adj_graph: scipy.sparse.csr_matrix, node_list: list[str], number_samples: int):
     non_existing_edges = []
     offset = 0
     for i in tqdm(range(adj_graph.shape[0])):
         for j in range(offset, adj_graph.shape[1]):
             if i != j:
                 if adj_graph[i, j] == 0:
-                    non_existing_edges.extend([node_list[i], node_list[j]])
+                    non_existing_edges.extend([(node_list[i], node_list[j])])
 
         offset += 1
-    return sorted(random.sample(non_existing_edges, k=number_samples))
-
+    random_edges = sorted(random.sample(non_existing_edges, k=number_samples))
+    return [(i[0],i[1]) for i in tqdm(random_edges) if nx.has_path(graph, i[0], i[1])]
 
 def get_removable_edges(graph: nx.DiGraph):
     number_conected_components = nx.number_weakly_connected_components(graph)
     number_nodes = len(graph.nodes())
     tmp_graph = graph.copy()
     removable_edges = []
-    for i in tqdm(list(tmp_graph.edges())):
-        tmp_graph.remove_edge(i)
+    for i in tqdm(list(tmp_graph.edges())[:10000]):
+        tmp_graph.remove_edge(*i)
 
         if nx.number_weakly_connected_components(tmp_graph) == number_conected_components and \
-                len(tmp_graph.nopdes()) == number_nodes:
+                len(tmp_graph.nodes()) == number_nodes:
             removable_edges.append(i)
             continue
 
-        tmp_graph.add_edge(i)
+        tmp_graph.add_edge(*i)
     return removable_edges
 
 def main():
     graph = create_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
-    adj_graph = scipy.sparse.load_npz('../data/games/network/all_games_adjacency_matrix.npz')
-    non_existing_edges = generate_non_existing_edges(adj_graph, list(graph.nodes()), 4000)
+    adj_graph = nx.to_numpy_matrix(graph, nodelist = list(graph.nodes()))
+    non_existing_edges = generate_non_existing_edges(graph, adj_graph, list(graph.nodes()), 4000)
     non_existing_edges_df = pd.DataFrame(data=non_existing_edges, columns=['source', 'target'])
     non_existing_edges_df['connection'] = 0
     removable_edges = get_removable_edges(graph)
