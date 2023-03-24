@@ -81,8 +81,10 @@ def load_graph_from_csv(graph_filename: str, filter_filename: str) -> gt.Graph:
         filter_filename (str): A CSV file that creates a filter map.
 
     """
-
-    filter_map = generate_network_filter(filter_filename)
+    filter_map = None
+    if filter_filename is not None:
+        filter_map = generate_network_filter(filter_filename)
+        
     edges_list = get_weighted_edges_from_csv(graph_filename, filter=filter_map)
     return gt.Graph(edges_list, hashed=True, hash_type="string", eprops=[('weight', 'double')])
 
@@ -224,10 +226,17 @@ def visualise_graph(graph: gt.Graph):
                vorder=graph.vp.prop, output="test.pdf")
 
 def main():
-    graph = load_graph_from_csv("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
-    save_pagerank_to_file(graph, "../data/games/network/all_games_pagerank.csv")
-    save_hits_centrality_to_file(graph, "../data/games/network/all_games_hits_centrality.csv")
-    save_closeness_centrality_to_file(graph, "../data/games/network/all_games_closeness_centrality.csv")
+    graph = load_graph_from_csv("../data/games/network/communities/meta_network_louvain_communities.csv", None)
+    save_pagerank_to_file(graph, "../data/games/network/centrality/meta_network_louvain_pagerank.csv")
+    save_betweenness_centrality_to_file(graph, "../data/games/network/centrality/meta_network_louvain_betweenness.csv")
+
+    graph = load_graph_from_csv("../data/games/network/communities/meta_network_greedy_modularity_communities.csv", None)
+    save_pagerank_to_file(graph, "../data/games/network/centrality/meta_network_greedy_modularity_pagerank.csv")
+    save_betweenness_centrality_to_file(graph, "../data/games/network/centrality/meta_network_greedy_modularity_betweenness.csv")
+    
+    graph = load_graph_from_csv("../data/games/network/communities/meta_network_infomap_communities.csv", None)
+    save_pagerank_to_file(graph, "../data/games/network/centrality/meta_network_infomap_pagerank.csv")
+    save_betweenness_centrality_to_file(graph, "../data/games/network/centrality/meta_network_infomap_betweenness.csv")
 
 if __name__ == "__main__":
     main()
