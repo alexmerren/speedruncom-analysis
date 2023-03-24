@@ -224,11 +224,11 @@ def generate_removable_edges_data():
     dataset.to_csv('../data/games/network/edge_existence_dataset.csv')
 
 def format_user_preferences_df(df: pd.DataFrame) -> pd.DataFrame:
-    user_prefs_df = user_prefs_df[(user_prefs_df['signup_date'].notna()) & (user_prefs_df['signup_date'] != "Null")]
-    user_prefs_df['signup_date'] = pd.to_datetime(user_prefs_df['signup_date'], format='%Y-%m-%dT%H:%M:%SZ')
-    user_prefs_df['signup_date'] = pd.to_datetime(user_prefs_df['signup_date'].dt.strftime('%Y-%m-%d'))
-    user_prefs_df = user_prefs_df[(user_prefs_df['signup_date'] < '2023-01-01')]
-    return user_prefs_df
+    df = df[(df['signup_date'].notna()) & (df['signup_date'] != "Null")]
+    df['signup_date'] = pd.to_datetime(df['signup_date'], format='%Y-%m-%dT%H:%M:%SZ')
+    df['signup_date'] = pd.to_datetime(df['signup_date'].dt.strftime('%Y-%m-%d'))
+    df = df[(df['signup_date'] < '2023-01-01')]
+    return df
 
 def explode_user_preferences_df(df: pd.DataFrame) -> pd.DataFrame:
     exploded_games_df = df.copy()
@@ -249,7 +249,7 @@ def generate_communities_for_bipartite_user_graph():
     user_prefs_df = format_user_preferences_df(user_prefs_df)
     user_prefs_df = explode_user_preferences_df(user_prefs_df)
     bipartite_graph = create_bipartite_user_graph(user_prefs_df)
-    find_louvain_communities(bipartite_graph, "../data/users/louvain_communities.csv")
+    #find_louvain_communities(bipartite_graph, "../data/users/louvain_communities.csv")
     find_greedy_modularity_communities(bipartite_graph, "../data/users/greedy_modularity_communities.csv")
     find_infomap_communities(bipartite_graph, "../data/users/infomap_communities.csv")
 
