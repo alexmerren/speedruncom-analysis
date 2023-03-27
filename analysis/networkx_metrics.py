@@ -249,9 +249,8 @@ def generate_communities_for_bipartite_user_graph():
     user_prefs_df = format_user_preferences_df(user_prefs_df)
     user_prefs_df = explode_user_preferences_df(user_prefs_df)
     bipartite_graph = create_bipartite_user_graph(user_prefs_df)
-    #find_louvain_communities(bipartite_graph, "../data/users/louvain_communities.csv")
-    find_greedy_modularity_communities(bipartite_graph, "../data/users/greedy_modularity_communities.csv")
-    find_infomap_communities(bipartite_graph, "../data/users/infomap_communities.csv")
+    df = nx.to_pandas_adjacency(bipartite_graph, weight='weight')
+    df.to_csv('../data/users/bipartite_adjacency_matrix.csv')
 
 def main():
     generate_communities_for_bipartite_user_graph()
