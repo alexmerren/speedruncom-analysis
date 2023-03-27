@@ -464,7 +464,7 @@ class Collector:
 
                 openfile.write(f"{game_id},{game_name},{developers},{release_date},{created_date},{num_categories},{num_levels},{num_runs},{num_users},{num_guests}\n")
 
-    def collect_all_related_games_data(self, percentage_limit=1.0, filter_filename="data/games/metadata/all_games.csv", doFilter=True):
+    def collect_all_related_games_data(self, percentage_limit=1.0, filter_filename="data/games/metadata/all_games_srcom.csv", doFilter=True):
         """Collate all the data from `data/games/network_raw/` into a single file.
 
         Searches through the `data/games/network_raw/` directory for all the
