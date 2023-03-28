@@ -10,7 +10,9 @@ from datetime import datetime
 from collections import defaultdict
 from cdlib import algorithms
 from tqdm import tqdm
-from sklearn.cluster import SpectralClustering
+from sknetwork.data import Bunch, load, save
+from sknetwork.topology import is_bipartite
+from sknetwork.clustering import Louvain
 
 FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
@@ -252,7 +254,15 @@ def generate_communities_for_bipartite_user_graph():
     bipartite_graph = create_bipartite_user_graph(user_prefs_df)
     nodelist = list(bipartite_graph.nodes())
     biadjacency = nx.to_scipy_sparse_matrix(bipartite_graph, weight='weight', nodelist=nodelist)
-    labels = SpectralClustering(n_clusters=5, assign_labels='discretize', random_state=0).fit_predict(biadjacency)
+
+    graph = Bunch()
+    graph.biadjacency = biadjacency
+    graph.names = nodelist
+    assert is_bipartite(biadjacency)
+
+    louvain = Louvain()
+    louvain.fit(biadjacency)
+    labels = louvain.labels_
 
     assert len(labels) == len(nodelist)
     with open('./test.csv', 'w', encoding='utf-8') as openfile:
