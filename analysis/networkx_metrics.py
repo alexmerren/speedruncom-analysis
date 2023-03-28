@@ -12,7 +12,7 @@ from cdlib import algorithms
 from tqdm import tqdm
 from sknetwork.data import Bunch, load, save
 from sknetwork.topology import is_bipartite
-from sknetwork.clustering import Louvain
+from sknetwork.clustering import Louvain, get_modularity
 
 FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
@@ -263,10 +263,11 @@ def generate_communities_for_bipartite_user_graph():
     louvain = Louvain()
     louvain.fit(biadjacency)
     labels = louvain.labels_
+    print(get_modularity(biadjacency,labels))
 
     assert len(labels) == len(nodelist)
     with open('./test.csv', 'w', encoding='utf-8') as openfile:
-        openfile.write("node_id,label\n")
+        openfile.write("node_id,row_lable,col_label\n")
         for node_id, label in zip(nodelist, labels):
             openfile.write(f"{node_id},{label}\n")
 
