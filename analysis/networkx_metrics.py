@@ -10,6 +10,7 @@ from datetime import datetime
 from collections import defaultdict
 from cdlib import algorithms
 from tqdm import tqdm
+from sklearn.cluster import SpectralClustering
 
 FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
@@ -249,8 +250,15 @@ def generate_communities_for_bipartite_user_graph():
     user_prefs_df = format_user_preferences_df(user_prefs_df)
     user_prefs_df = explode_user_preferences_df(user_prefs_df)
     bipartite_graph = create_bipartite_user_graph(user_prefs_df)
-    df = nx.to_pandas_adjacency(bipartite_graph, weight='weight')
-    df.to_csv('../data/users/bipartite_adjacency_matrix.csv')
+    nodelist = list(bipartite_graph.nodes())
+    biadjacency = nx.to_scipy_sparse_matrix(bipartite_graph, weight='weight', nodelist=nodelist)
+    labels = SpectralClustering(n_clusters=5, assign_labels='discretize', random_state=0).fit_predict(biadjacency)
+
+    assert len(labels) == len(nodelist)
+    with open('./test.csv', 'w', encoding='utf-8') as openfile:
+        openfile.write("node_id,label\n")
+        for node_id, label in zip(nodelist, labels):
+            openfile.write(f"{node_id},{label}\n")
 
 def main():
     generate_communities_for_bipartite_user_graph()
