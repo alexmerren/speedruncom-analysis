@@ -5,6 +5,7 @@ import time
 from collections import defaultdict
 from datetime import datetime
 from requests_cache import CachedSession
+from requests.exceptions import JSONDecodeError
 
 FINAL_DATE = datetime(2023, 1, 1)
 REQUEST_TIMEOUT_SLEEP = 2
@@ -148,8 +149,63 @@ def write_user_preferences_file(filename: str, users_games: dict[str, set[str]])
             
             openfile.write(f"{user_id},{signup_date},{country_code},{len(game_ids)},{games}\n")
 
-def main():
-    filter_filename = "../data/games/metadata/all_games.csv"
+
+def generate_all_users_from_raw(directory: str, filter_map=None):
+    filenames = []
+    with os.scandir(directory) as dir:
+        for file in dir:
+            if file.name.endswith('.csv') and file.is_file():
+                filenames.append(file)
+
+    all_users = []
+    for file in filenames:
+        with open(file, 'r', encoding='utf-8') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            next(csv_reader)
+            for row in csv_reader:
+                all_users.append(row[1])
+
+    return sorted(all_users)
+
+def write_user_runs_file(filename: str, all_users: list[str], start_index: int):
+    num_users = len(all_users)
+    with open(filename, 'w', encoding='utf-8') as openfile:
+        openfile.write("user,num_runs\n")
+        for index, user in enumerate(all_users[start_index:]):
+            print(f"index={index+start_index},{num_users=},{user=}")
+            uri = f"https://www.speedrun.com/api/v1/runs?user={user}&max=200&status=verified"
+            more_pages = True
+            num_runs = 0
+            while more_pages:
+                response_data = get(uri)
+                if response_data == None:
+                    return 
+
+                for run in response_data.get('data'):
+                    if datetime.strptime(run.get('date'), '%Y-%m-%d') < FINAL_DATE:
+                        num_runs += 1
+
+                if response_data.get("pagination").get("size") < 200:
+                    more_pages = False
+
+                for link in response_data.get("pagination")["links"]:
+                    if link["rel"] == "next":
+                        uri = link["uri"]
+
+            openfile.write(f"{user},{num_runs}")
+
+def generate_user_runs(start_index: int):
+    filter_filename = "../data/games/metadata/all_games_srcom.csv"
+    filter_map = generate_network_filter(filter_filename)
+
+    related_games_directory = "../data/games/network_raw/"
+    all_users = generate_all_users_from_raw(related_games_directory, filter=filter_map)
+
+    users_runs_filename = "../data/users/user_preferences_with_metadata.csv"
+    write_user_runs_file(users_runs_filename, all_users, start_index)
+
+def generate_user_preferences():
+    filter_filename = "../data/games/metadata/all_games_srcom.csv"
     filter_map = generate_network_filter(filter_filename)
 
     related_games_directory = "../data/games/network_raw/"
@@ -157,6 +213,9 @@ def main():
 
     users_games_filename = "../data/users/user_preferences_with_metadata.csv"
     write_user_preferences_file(users_games_filename, users_games)
+
+def main():
+    generate_user_runs(start_index=0)
 
 if __name__ == "__main__":
     main()
