@@ -30,7 +30,7 @@ class GameMetadataCollector:
     def __init__(self, name:str, debug=0):
         base = collector_base.CollectorBase(debug=debug)
         name = escape_filename(name)
-        self.api = Collector(base, f"data/games/metadata/{name}.csv", debug=debug)
+        self.api = Collector(base, f"data/raw/{name}.csv", debug=debug)
 
     def run(self, start_index=0):
         """Start the collection process of writing to file with an optional start index.
@@ -124,7 +124,7 @@ class IndividualRelatedGamesCollector:
         base = collector_base.CollectorBase(debug=debug)
         self.debug = debug
         name = escape_filename(name)
-        self.api = Collector(base, f"data/games/network_raw/{name}.csv", debug=debug) 
+        self.api = Collector(base, f"data/raw/games/{name}.csv", debug=debug) 
 
     def run(self, game_id:str, user_start_index=0):
         """
@@ -137,7 +137,7 @@ class WorldRecordHistoryCollector:
     def __init__(self, name: str):
         base = collector_base.CollectorBase(debug=1)
         name = escape_filename(name)
-        self.api = Collector(base, f"data/games/world_record_history/{name}.csv")
+        self.api = Collector(base, f"data/raw/world_record_history/{name}.csv")
         self.game_id = base.get_game_id(name)
         self.categories = base.get_game(self.game_id).categories
 
@@ -348,7 +348,7 @@ class Collector:
             if self.debug >= 1: print(f"game_index={game_start_index+index},total={total_len},{game_id=}")
             game_name = self.base.get_game(game_id).name
             game_name = escape_filename(game_name)
-            writeApi = Collector(self.base, f"data/games/network_raw/{index+game_start_index:05}_{game_name}.csv", debug=1)
+            writeApi = Collector(self.base, f"data/raw/games/{index+game_start_index:05}_{game_name}.csv", debug=1)
             writeApi.get_users_related_games_for_game(game_id, user_start_index)
             user_start_index = 0
 
@@ -464,7 +464,7 @@ class Collector:
 
                 openfile.write(f"{game_id},{game_name},{developers},{release_date},{created_date},{num_categories},{num_levels},{num_runs},{num_users},{num_guests}\n")
 
-    def collect_all_related_games_data(self, percentage_limit=1.0, filter_filename="data/games/metadata/all_games_srcom.csv", doFilter=True):
+    def collect_all_related_games_data(self, percentage_limit=1.0, filter_filename="data/raw/srcom_games_with_metadata.csv", doFilter=True):
         """Collate all the data from `data/games/network_raw/` into a single file.
 
         Searches through the `data/games/network_raw/` directory for all the
@@ -479,7 +479,7 @@ class Collector:
 
         """
 
-        path = "data/games/network_raw/"
+        path = "data/raw/games/"
         filenames = []
         with os.scandir(path) as directory:
             for file in directory:
