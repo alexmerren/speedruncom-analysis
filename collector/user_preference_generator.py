@@ -165,11 +165,11 @@ def generate_all_users_from_raw(directory: str, filter_map=None):
             for row in csv_reader:
                 all_users.append(row[1])
 
-    return sorted(all_users)
+    return sorted(list(set(all_users)))
 
 def write_user_runs_file(filename: str, all_users: list[str], start_index: int):
     num_users = len(all_users)
-    with open(filename, 'w', encoding='utf-8') as openfile:
+    with open(filename, 'a', encoding='utf-8') as openfile:
         openfile.write("user,num_runs\n")
         for index, user in enumerate(all_users[start_index:]):
             print(f"index={index+start_index},{num_users=},{user=}")
@@ -179,10 +179,14 @@ def write_user_runs_file(filename: str, all_users: list[str], start_index: int):
             while more_pages:
                 response_data = get(uri)
                 if response_data == None:
-                    return 
+                    break
 
                 for run in response_data.get('data'):
-                    if datetime.strptime(run.get('date'), '%Y-%m-%d') < FINAL_DATE:
+                    date = run.get('date')
+                    if date == None:
+                        date = '2017-01-01'
+
+                    if datetime.strptime(date, '%Y-%m-%d') < FINAL_DATE:
                         num_runs += 1
 
                 if response_data.get("pagination").get("size") < 200:
@@ -192,16 +196,16 @@ def write_user_runs_file(filename: str, all_users: list[str], start_index: int):
                     if link["rel"] == "next":
                         uri = link["uri"]
 
-            openfile.write(f"{user},{num_runs}")
+            openfile.write(f"{user},{num_runs}\n")
 
 def generate_user_runs(start_index: int):
     filter_filename = "../data/games/metadata/all_games_srcom.csv"
     filter_map = generate_network_filter(filter_filename)
 
     related_games_directory = "../data/games/network_raw/"
-    all_users = generate_all_users_from_raw(related_games_directory, filter=filter_map)
+    all_users = generate_all_users_from_raw(related_games_directory, filter_map=filter_map)
 
-    users_runs_filename = "../data/users/user_preferences_with_metadata.csv"
+    users_runs_filename = "../data/users/user_runs.csv"
     write_user_runs_file(users_runs_filename, all_users, start_index)
 
 def generate_user_preferences():

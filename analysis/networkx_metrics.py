@@ -260,9 +260,11 @@ def generate_communities_for_bipartite_user_graph():
     graph.names = nodelist
     assert is_bipartite(biadjacency)
 
-    louvain = Louvain()
+    louvain = Louvain(modularity='newman')
     louvain.fit(biadjacency)
-    labels = louvain.labels_
+    print(louvain.labels_row_, louvain.labels_col_)
+    return False
+
     print(get_modularity(biadjacency,labels))
 
     assert len(labels) == len(nodelist)
