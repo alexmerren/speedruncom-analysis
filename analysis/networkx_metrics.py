@@ -262,19 +262,34 @@ def generate_communities_for_bipartite_user_graph():
 
     louvain = Louvain(modularity='newman')
     louvain.fit(biadjacency)
-    print(louvain.labels_row_, louvain.labels_col_)
-    return False
+    labels = louvain.labels_
 
     print(get_modularity(biadjacency,labels))
 
     assert len(labels) == len(nodelist)
     with open('./test.csv', 'w', encoding='utf-8') as openfile:
-        openfile.write("node_id,row_lable,col_label\n")
+        openfile.write("node_id,label\n")
         for node_id, label in zip(nodelist, labels):
             openfile.write(f"{node_id},{label}\n")
 
+def greedy_modularity_and_infomap_for_bipartite_user_graph():
+    user_prefs_df = pd.read_csv("../data/users/user_preferences_with_metadata.csv")
+    user_prefs_df = format_user_preferences_df(user_prefs_df)
+    user_prefs_df = explode_user_preferences_df(user_prefs_df)
+    bipartite_graph = create_bipartite_user_graph(user_prefs_df)
+
+    infomap_communities = algorithms.infomap(bipartite_graph).communities
+    modularity = nx.community.modularity(bipartite_graph, infomap_communities)
+    coverage, performance = nx.community.partition_quality(bipartite_graph, infomap_communities)
+    print(f"INFOMAP: {modularity=},{performance=},{coverage=}")
+
+    cnm_communities = nx_comm.greedy_modularity_communities(bipartite_graph)
+    modularity = nx.community.modularity(bipartite_graph, cnm_communities)
+    coverage, performance = nx.community.partition_quality(bipartite_graph, cnm_communities)
+    print(f"CNM: {modularity=},{performance=},{coverage=}")
+
 def main():
-    generate_communities_for_bipartite_user_graph()
+    greedy_modularity_and_infomap_for_bipartite_user_graph()
 
 if __name__ == "__main__":
     main()
