@@ -80,7 +80,6 @@ def get_weighted_edges_from_csv(filename: str, filter=None) -> list[tuple[str, s
 
     return edges
 
-
 def get_edges_from_csv(filename: str, filter=None) -> list[tuple[str, str]]:
     """Create a list of edges with structure `node1,node2,weight`.
 
@@ -164,6 +163,10 @@ def save_weighted_graph(g: nx.DiGraph, filename: str):
             weight = int(data['weight'])
             output_string = ','.join(map(str, [source, target, weight]))
             openfile.write(f"{output_string}\n")
+
+def find_average_clustering_coefficient_games_network():
+    graph = create_games_graph("../data/too_big/all_games.csv", "../data/raw/srcom_games_with_metadata.csv")
+    print(nx.average_clustering(graph, weight='weight'))
 
 def create_meta_graph(graph: nx.DiGraph, node_to_cluster_map: dict[str, int]) -> nx.DiGraph:
     source_target_number = defaultdict(int)
@@ -272,24 +275,32 @@ def generate_communities_for_bipartite_user_graph():
         for node_id, label in zip(nodelist, labels):
             openfile.write(f"{node_id},{label}\n")
 
-def greedy_modularity_and_infomap_for_bipartite_user_graph():
-    user_prefs_df = pd.read_csv("../data/users/user_preferences_with_metadata.csv")
+def find_metrics_for_bipartite_graph():
+    user_prefs_df = pd.read_csv("../data/raw/srcom_users_with_metadata.csv")
     user_prefs_df = format_user_preferences_df(user_prefs_df)
     user_prefs_df = explode_user_preferences_df(user_prefs_df)
     bipartite_graph = create_bipartite_user_graph(user_prefs_df)
 
-    infomap_communities = algorithms.infomap(bipartite_graph).communities
-    modularity = nx.community.modularity(bipartite_graph, infomap_communities)
-    coverage, performance = nx.community.partition_quality(bipartite_graph, infomap_communities)
-    print(f"INFOMAP: {modularity=},{performance=},{coverage=}")
+    # louvain_communities = nx_comm.louvain_communities(bipartite_graph, seed=0)
+    # modularity = nx.community.modularity(bipartite_graph, louvain_communities)
+    # coverage, performance = nx.community.partition_quality(bipartite_graph, louvain_communities)
+    # print(f"LOUVAIN: {modularity=},{performance=},{coverage=}")
+
+    # infomap_communities = algorithms.infomap(bipartite_graph).communities
+    # modularity = nx.community.modularity(bipartite_graph, infomap_communities)
+    # coverage, performance = nx.community.partition_quality(bipartite_graph, infomap_communities)
+    # print(f"INFOMAP: {modularity=},{performance=},{coverage=}")
 
     cnm_communities = nx_comm.greedy_modularity_communities(bipartite_graph)
     modularity = nx.community.modularity(bipartite_graph, cnm_communities)
     coverage, performance = nx.community.partition_quality(bipartite_graph, cnm_communities)
-    print(f"CNM: {modularity=},{performance=},{coverage=}")
+    with open('./t2.csv', 'a', encoding='utf-8') as openfile:
+        openfile.write("algorithm,modularity,performance,coverage\n")
+        openfile.write(f"clauset_newman_moore,{modularity},{performance},{coverage}\n")
 
 def main():
-    greedy_modularity_and_infomap_for_bipartite_user_graph()
+    find_metrics_for_bipartite_graph()
+    # find_average_clustering_coefficient_games_network()
 
 if __name__ == "__main__":
     main()
