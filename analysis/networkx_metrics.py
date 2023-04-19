@@ -298,8 +298,15 @@ def find_metrics_for_bipartite_graph():
         openfile.write("algorithm,modularity,performance,coverage\n")
         openfile.write(f"clauset_newman_moore,{modularity},{performance},{coverage}\n")
 
+def find_optimum_hyperparameters():
+    graph = create_games_graph('../data/too_big/all_games_filtered.csv', '../data/raw/srcom_games_with_metadata.csv')
+    louvain_communities = nx_comm.louvain_communities(graph, seed=0)
+    modularity = nx.community.modularity(graph, louvain_communities)
+    coverage, performance = nx.community.partition_quality(graph, louvain_communities)
+    print(f"LOUVAIN: {modularity=},{performance=},{coverage=}")
+
 def main():
-    find_metrics_for_bipartite_graph()
+    # find_metrics_for_bipartite_graph()
     # find_average_clustering_coefficient_games_network()
 
 if __name__ == "__main__":

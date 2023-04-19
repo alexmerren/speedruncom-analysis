@@ -1,8 +1,5 @@
 import csv
-import matplotlib
-
 import graph_tool.all as gt
-
 from graph_tool.centrality import betweenness, pagerank, hits, closeness, eigenvector
 from datetime import datetime
 from collections import defaultdict
@@ -218,25 +215,19 @@ def add_property_to_graph_from_file(graph: gt.Graph, property_name: str, filenam
 
     return graph 
 
-def visualise_graph(graph: gt.Graph):
-    position = gt.sfdp_layout(graph)
-    gt.graph_draw(graph, pos=position, vertex_fill_color=graph.vp.prop,
-               vertex_size=gt.prop_to_size(graph.vp.prop, mi=5, ma=15),
-               vcmap=matplotlib.cm.gist_heat,
-               vorder=graph.vp.prop, output="test.pdf")
+def find_clustering_coeff(graph: gt.Graph):
+    graph.vertex_properties['clustering'] = graph.new_vertex_property("double")
+    # gt.local_clustering(graph, weight=graph.ep.weight, prop=graph.vp.clustering, undirected=False)
+    gt.local_clustering(graph, prop=graph.vp.clustering, undirected=False)
+    clustering_coefficient = graph.vp.clustering.get_array()
+    average_clustering_coefficient = sum(clustering_coefficient) / len(clustering_coefficient)
+    print(f"order={graph.num_vertices()},size={graph.num_edges()}")
+    print(f"{average_clustering_coefficient=}")
+    return average_clustering_coefficient
 
 def main():
-    graph = load_graph_from_csv("../data/games/network/communities/meta_network_louvain_communities.csv", None)
-    save_pagerank_to_file(graph, "../data/games/network/centrality/meta_network_louvain_pagerank.csv")
-    save_betweenness_centrality_to_file(graph, "../data/games/network/centrality/meta_network_louvain_betweenness.csv")
-
-    graph = load_graph_from_csv("../data/games/network/communities/meta_network_greedy_modularity_communities.csv", None)
-    save_pagerank_to_file(graph, "../data/games/network/centrality/meta_network_greedy_modularity_pagerank.csv")
-    save_betweenness_centrality_to_file(graph, "../data/games/network/centrality/meta_network_greedy_modularity_betweenness.csv")
-    
-    graph = load_graph_from_csv("../data/games/network/communities/meta_network_infomap_communities.csv", None)
-    save_pagerank_to_file(graph, "../data/games/network/centrality/meta_network_infomap_pagerank.csv")
-    save_betweenness_centrality_to_file(graph, "../data/games/network/centrality/meta_network_infomap_betweenness.csv")
+    graph = load_graph_from_csv('../data/too_big/all_games_filtered.csv', '../data/raw/srcom_games_with_metadata.csv')
+    find_clustering_coeff(graph)
 
 if __name__ == "__main__":
     main()
