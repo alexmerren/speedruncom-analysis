@@ -218,7 +218,7 @@ def get_removable_edges(graph: nx.DiGraph):
     return removable_edges
 
 def generate_removable_edges_data():
-    graph = create_games_graph("../data/too_big/all_games.csv", "../data/games/metadata/all_games.csv")
+    graph = create_games_graph("../data/too_big/all_games.csv", "../data/raw/srcom_games_with_metadata.csv")
     adj_graph = nx.to_numpy_matrix(graph, nodelist = list(graph.nodes()))
     non_existing_edges = generate_non_existing_edges(graph, adj_graph, list(graph.nodes()), 4000)
     non_existing_edges_df = pd.DataFrame(data=non_existing_edges, columns=['source', 'target'])
@@ -230,16 +230,16 @@ def generate_removable_edges_data():
     dataset.to_csv('../data/games/network/edge_existence_dataset.csv')
 
 def format_user_preferences_df(df: pd.DataFrame) -> pd.DataFrame:
-    df = df[(df['signup_date'].notna()) & (df['signup_date'] != "Null")]
-    df['signup_date'] = pd.to_datetime(df['signup_date'], format='%Y-%m-%dT%H:%M:%SZ')
-    df['signup_date'] = pd.to_datetime(df['signup_date'].dt.strftime('%Y-%m-%d'))
-    df = df[(df['signup_date'] < '2023-01-01')]
+    df = df[(df['user_signup_date'].notna()) & (df['user_signup_date'] != "Null")]
+    df['user_signup_date'] = pd.to_datetime(df['user_signup_date'], format='%Y-%m-%dT%H:%M:%SZ')
+    df['user_signup_date'] = pd.to_datetime(df['user_signup_date'].dt.strftime('%Y-%m-%d'))
+    df = df[(df['user_signup_date'] < '2023-01-01')]
     return df
 
 def explode_user_preferences_df(df: pd.DataFrame) -> pd.DataFrame:
     exploded_games_df = df.copy()
-    exploded_games_df['games'] = exploded_games_df['games'].str.split(',')
-    exploded_games_df = exploded_games_df.explode('games').rename(columns = {'games': 'game_id', 'user':'user_id'})[['user_id', 'game_id']]
+    exploded_games_df['user_games'] = exploded_games_df['user_games'].str.split(',')
+    exploded_games_df = exploded_games_df.explode('user_games').rename(columns = {'user_games': 'game_id'})[['user_id', 'game_id']]
     return exploded_games_df
 
 def create_bipartite_user_graph(df: pd.DataFrame) -> nx.Graph:
@@ -251,7 +251,7 @@ def create_bipartite_user_graph(df: pd.DataFrame) -> nx.Graph:
     return bipartite_graph
 
 def generate_communities_for_bipartite_user_graph():
-    user_prefs_df = pd.read_csv("../data/users/user_preferences_with_metadata.csv")
+    user_prefs_df = pd.read_csv("../data/raw/srcom_users_with_metadata.csv")
     user_prefs_df = format_user_preferences_df(user_prefs_df)
     user_prefs_df = explode_user_preferences_df(user_prefs_df)
     bipartite_graph = create_bipartite_user_graph(user_prefs_df)
@@ -281,15 +281,15 @@ def find_metrics_for_bipartite_graph():
     user_prefs_df = explode_user_preferences_df(user_prefs_df)
     bipartite_graph = create_bipartite_user_graph(user_prefs_df)
 
-    # louvain_communities = nx_comm.louvain_communities(bipartite_graph, seed=0)
-    # modularity = nx.community.modularity(bipartite_graph, louvain_communities)
-    # coverage, performance = nx.community.partition_quality(bipartite_graph, louvain_communities)
-    # print(f"LOUVAIN: {modularity=},{performance=},{coverage=}")
+    louvain_communities = nx_comm.louvain_communities(bipartite_graph, seed=0)
+    modularity = nx.community.modularity(bipartite_graph, louvain_communities)
+    coverage, performance = nx.community.partition_quality(bipartite_graph, louvain_communities)
+    print(f"LOUVAIN: {modularity=},{performance=},{coverage=}")
 
-    # infomap_communities = algorithms.infomap(bipartite_graph).communities
-    # modularity = nx.community.modularity(bipartite_graph, infomap_communities)
-    # coverage, performance = nx.community.partition_quality(bipartite_graph, infomap_communities)
-    # print(f"INFOMAP: {modularity=},{performance=},{coverage=}")
+    infomap_communities = algorithms.infomap(bipartite_graph).communities
+    modularity = nx.community.modularity(bipartite_graph, infomap_communities)
+    coverage, performance = nx.community.partition_quality(bipartite_graph, infomap_communities)
+    print(f"INFOMAP: {modularity=},{performance=},{coverage=}")
 
     cnm_communities = nx_comm.greedy_modularity_communities(bipartite_graph)
     modularity = nx.community.modularity(bipartite_graph, cnm_communities)
@@ -298,16 +298,36 @@ def find_metrics_for_bipartite_graph():
         openfile.write("algorithm,modularity,performance,coverage\n")
         openfile.write(f"clauset_newman_moore,{modularity},{performance},{coverage}\n")
 
-def find_optimum_hyperparameters():
-    graph = create_games_graph('../data/too_big/all_games_filtered.csv', '../data/raw/srcom_games_with_metadata.csv')
-    louvain_communities = nx_comm.louvain_communities(graph, seed=0)
-    modularity = nx.community.modularity(graph, louvain_communities)
-    coverage, performance = nx.community.partition_quality(graph, louvain_communities)
-    print(f"LOUVAIN: {modularity=},{performance=},{coverage=}")
+def create_meta_networks_for_bipartite_graph():
+    user_prefs_df = pd.read_csv("../data/raw/srcom_users_with_metadata.csv")
+    user_prefs_df = format_user_preferences_df(user_prefs_df)
+    user_prefs_df = explode_user_preferences_df(user_prefs_df)
+    bipartite_graph = create_bipartite_user_graph(user_prefs_df)
+
+    node_to_cluster = create_node_to_cluster_map('../data/processed/users/bipartite_louvain_communities.csv')
+    meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
+    save_weighted_graph(meta_network, '../data/processed/users/meta_network_louvain_communities.csv')
+
+    node_to_cluster = create_node_to_cluster_map('../data/processed/users/bipartite_infomap_communities.csv')
+    meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
+    save_weighted_graph(meta_network, '../data/processed/users/meta_network_infomap_communities.csv')
+
+    node_to_cluster = create_node_to_cluster_map('../data/processed/users/bipartite_greedy_modularity_communities.csv')
+    meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
+    save_weighted_graph(meta_network, '../data/processed/users/meta_network_greedy_modularity_communities.csv')
+
+def create_meta_network_for_sub_bipartite_graph():
+    user_prefs_df = pd.read_csv("../data/raw/srcom_users_with_metadata.csv")
+    user_prefs_df = format_user_preferences_df(user_prefs_df)
+    user_prefs_df = explode_user_preferences_df(user_prefs_df)
+    bipartite_graph = create_bipartite_user_graph(user_prefs_df)
+
+    node_to_cluster = create_node_to_cluster_map('../data/processed/users/sub_bipartite_bilouvain_communities_formatted.csv')
+    meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
+    save_weighted_graph(meta_network, '../data/processed/users/meta_network_sub_bipartite_louvain_communities.csv')
 
 def main():
-    # find_metrics_for_bipartite_graph()
-    # find_average_clustering_coefficient_games_network()
+    create_meta_network_for_sub_bipartite_graph()   
 
 if __name__ == "__main__":
     main()
