@@ -304,17 +304,17 @@ def create_meta_networks_for_bipartite_graph():
     user_prefs_df = explode_user_preferences_df(user_prefs_df)
     bipartite_graph = create_bipartite_user_graph(user_prefs_df)
 
-    node_to_cluster = create_node_to_cluster_map('../data/processed/users/bipartite_louvain_communities.csv')
+    node_to_cluster = create_node_to_cluster_map('../data/processed/users/communities/bipartite_bilouvain_communities.csv')
     meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
-    save_weighted_graph(meta_network, '../data/processed/users/meta_network_louvain_communities.csv')
+    save_weighted_graph(meta_network, '../data/processed/users/meta_network/meta_network_bilouvain_communities.csv')
 
-    node_to_cluster = create_node_to_cluster_map('../data/processed/users/bipartite_infomap_communities.csv')
-    meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
-    save_weighted_graph(meta_network, '../data/processed/users/meta_network_infomap_communities.csv')
+    # node_to_cluster = create_node_to_cluster_map('../data/processed/users/bipartite_infomap_communities.csv')
+    # meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
+    # save_weighted_graph(meta_network, '../data/processed/users/meta_network_infomap_communities.csv')
 
-    node_to_cluster = create_node_to_cluster_map('../data/processed/users/bipartite_greedy_modularity_communities.csv')
-    meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
-    save_weighted_graph(meta_network, '../data/processed/users/meta_network_greedy_modularity_communities.csv')
+    # node_to_cluster = create_node_to_cluster_map('../data/processed/users/bipartite_greedy_modularity_communities.csv')
+    # meta_network = create_meta_graph(bipartite_graph, node_to_cluster)
+    # save_weighted_graph(meta_network, '../data/processed/users/meta_network_greedy_modularity_communities.csv')
 
 def create_meta_network_for_sub_bipartite_graph():
     user_prefs_df = pd.read_csv("../data/raw/srcom_users_with_metadata.csv")
@@ -327,7 +327,7 @@ def create_meta_network_for_sub_bipartite_graph():
     save_weighted_graph(meta_network, '../data/processed/users/meta_network_sub_bipartite_louvain_communities.csv')
 
 def main():
-    create_meta_network_for_sub_bipartite_graph()   
+    create_meta_networks_for_bipartite_graph()   
 
 if __name__ == "__main__":
     main()

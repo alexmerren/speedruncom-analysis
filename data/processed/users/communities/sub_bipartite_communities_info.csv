@@ -1,4 +1,4 @@
-,community_num,num_users,num_games,num_users_zscore,num_games_zscore,avg_num_games_played,top_demographic,most_increased_demographic
+index,community_num,num_users,num_games,num_users_zscore,num_games_zscore,avg_num_games_played,top_demographic,most_increased_demographic
 0,0,30327,2362,7.3805607521165095,3.320838765871717,0.07788439344478518,US,US
 1,1,24432,4796,5.861475998788648,6.980318268116194,0.19629993451211525,US,NONE
 2,2,20530,7388,4.855968160368747,10.877348206414338,0.35986361422308816,US,US
