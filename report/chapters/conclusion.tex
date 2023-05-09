@@ -1,0 +1,26 @@
+\section{Conclusion}
+
+This project uses machine learning and data science techniques to understand the user behaviour of speedrunners. This network of speedrunners show a heavy imbalance between the games played, with the top 1.65\% of games being as popular as the bottom 98.35\%. The community detection methods found strong evidence of the existence of communities of users of speedrun.com whose video game preference align with each other. These communities shared preferences for specific game genres, franchises, mechanics, or platform. These communities are typically accessed by their most popular game. A couple of implementations of a game recommendation system found patterns of behaviour over most users. Most users tend to play games that are within a single game franchise, share similar mechanics, on a single platform, or are incredibly popular.
+
+
+The community detection results imply there are types of user that are defined by the games they play. These results could be utilised to enable data-driven decisions, particularly by video game developers or marketers. The game recommendation system results indicate that the developers of speedrun.com could implement a similar system using the data they have, and that it would be reasonably successful within the community. In this context, a game recommendation could improve the user engagement on the platform, and help developers anticipate the demands of the consumers.  
+
+
+This project contributes to the literature on the applications of community detection and recommendation systems, and under-investigated topics such as videogames. This study has labelled communities of users on speedrun.com, and created a game recommendation engine tailored towards speedrunners. A dataset of the games and users of speedrun.com was also curated and published on GitHub.com \cite{myself}. This research also addresses the gap in research surrounding speedrunning, and hopefully prompts further investigation into this topic. 
+
+\subsection{Critical Reflection}
+
+There are several limitations of the the research within this project. First, there was limited access to the data source of speedrun.com. Only users that have contributed to the leaderboards were included in the research. The speedrun.com REST API does not have functionality for listing all the users on their platform, so only a subset of all their users could be processed. The remaining users could give a broader picture of the speedrunning community as they may contribute through other means and not the leaderboards.
+
+
+Second, other speedrunning platforms could have been considered if more time was available to complete the research. Other online communities of speedrunners such as TwinGalaxies and SpeedDemosArchive contain important information about how the community interacts; more speedrunning communities could ratify the results found for the research on speedrun.com. 
+
+
+Another constraint of this research is the amount of metadata available for each user on speedrun.com. A limited amount of metadata was collected for each user on the speedrun.com platform as all information from the data source had to be non-identifiable. User metadata beyond what was supplied could help both the community detection and game recommendation methods. The community detection could use extra user metadata to find more nuances between the communities, and perhaps find patterns between personal characteristics and the games played by a community. Recommendation engines could use concepts such as interests and personal characteristics to provide recommendations to groups of users that share these traits.
+
+
+Other methods of community detection and recommendation systems could have been explored in this research. Time constraints and lack of experience in the relevant fields of research contributed to a lack of diversity of methods used to fulfil the aims of the project. Other methods of community detection could have found communities with higher modularity, and corroborated the communities found within this project. Likewise, other types of recommendation systems could improve on the methods used with respect to the scalability and variety of data used to produce recommendations.
+
+\subsection{Further Research}
+
+The limitations of this project provide several avenues for further research: investigating other online speedrunning communities, improving the methods of community detection and recommendation systems, or using other methods of analysis on the speedrun.com dataset. In particular, a rigorous testing of the produced recommendation system via click-through rate and conversion rate may be implemented by speedrun.com themselves. This project also raised some further questions that could be investigated further. For instance, how have the communities evolved through time? Every run in the dataset has a timestamp related to it — these could be used to track the evolution of the communities found in this project. Also, this study does not ask: What effect do influencers have on the speedrunning communities? This project has created communities of both users and games, but has not investigated the effect these users have on each other.
