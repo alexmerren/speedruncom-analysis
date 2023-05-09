@@ -1,0 +1,85 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+% Load Thesis Class
+\documentclass{CSDEXEThesis}
+
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{array}
+
+\colorlet{CellHighlight}{blue!15}
+\newcolumntype{C}{>{\centering\arraybackslash}p{8em}}
+\newcolumntype{D}{>{\centering\arraybackslash}p{13em}}
+
+% Insert the title of your thesis
+\title{Speedrunning Under The Eyes Of Machine Learning}
+
+% Insert Your Name and SRS number
+\author{Alexander Jack Christopher Merren}
+\studentId{227696}
+
+% Advisor - Internal Supervisor Department of Computer Science University of Exeter
+\advisor{Dr. Chico Camargo}
+
+% If you are co-advised - Internal or External  Supervisor 
+% \coadvisor{Prof. Robert Kahn}
+% \coadvisorsUniversity{University of Princeton}
+
+% insert the information on your degree M.Sc. or B.Sc. or M.Sci
+\university{University of Exeter}
+\mastername{Computer Science Department}
+\degree{B.Sc. Computer Science and Mathematics}
+\academicYear{2022/2023}
+
+% Insert thesis title
+\begin{filecontents*}[overwrite]{\jobname.xmpdata}
+    \Title{Speedrunning Under The Eyes Of Machine Learning}
+    \Author{Alexander Merren}
+    \Language{en-EN}
+    \Keywords{Computer Science\sep LaTeX}
+\end{filecontents*}
+
+
+% If The student does not allows the share of the thesis for only academic purposes 
+% uncomment the command
+\sharetrue
+%\autorfalse
+
+% Do you Certify that all material in this dissertation which is not my own work has been identified. 
+% to uncomment the command - Please comment this line
+%\certifyfalse
+\certifytrue
+
+
+% Document
+
+
+\begin{document}
+    % The front matter (Cover, ToC, Abstract, etc...)
+    \frontmatter
+
+    % The main content
+    % \mainmatter
+
+    % \include{example_chapters/01_chapter}
+    % \include{example_chapters/02_chapter}
+    % \include{example_chapters/03_chapter}
+    % \include{example_chapters/04_chapter}
+    % \include{example_chapters/05_chapter}
+
+    \newpage
+    \pagenumbering{arabic}
+
+    \input{chapters/introduction}
+    \input{chapters/background_context}
+    \input{chapters/design}
+    \input{chapters/methods}
+    \input{chapters/results}
+    \input{chapters/discussion}
+    \input{chapters/conclusion}
+    
+    % Bibliography, appendix, acknowledges, etc...
+    % \printbibliography
+    \backmatter
+\end{document}

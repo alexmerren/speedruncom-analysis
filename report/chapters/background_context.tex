@@ -1,0 +1,63 @@
+\section{Background Context}
+
+To understand the proposed research in this project we must discuss the history, purpose, and concepts of speedrunning. Furthermore, to evaluate the performance of community detection algorithms and recommendation system methods, it is necessary to understand the underlying functionality and the evaluation metrics of each technique. 
+
+\subsection{Speedrunning}
+
+The fundamental purpose of speedrunning is to `complete' a videogame as fast as possible. To achieve this, players use specific strategies to reach a defined point of completion. Some strategies follow unintended routes to save time, or exploit glitches to skip sections of a videogame's story. Videogames are divided into different categories where the definition of `completion' changes \cite{Hemmingsen}. Levels are smaller subdivisions of categories and apply a different objective to a segment of a full videogame. Some common definitions of completing a videogame are to reach the end credits (Any\%) or to collect all items (100\%). Any given attempt to speedrun a game is also known as a `run'. All players are competing with each other on leaderboards, which are organised by game, category, and level. The top run by every user in a combination of game, category, and level are displayed on the leaderboards, and the fastest run on any leaderboard is called a `world record'. The discovery and and perfection of speedrunning strategies is a form of cumulative evolution in the community, and is represented by the history of a world record.
+
+
+Speedrunning is performative in nature, as video evidence is required to submit a run on any leaderboard \cite{ScullyBlaker}. Previous research agrees that speedrunning has three components: physical mastery, collective knowledge, and subversion of expectations \cite{Hemmingsen, ScullyBlaker}. This ethos of speedrunning attracts many videogame players, as it is a natural consequence of playing videogames. The physical mastery and collective knowledge components inspire the community of speedrunners to be competitive and collaborative. All game-breaking discoveries are shared and celebrated, unlike other communities where glitches are withheld to gain a competitive advantage \cite{ScullyBlaker}. Most prior research has focused on the qualitative aspects of speedrunning; literature has determined the philosophy of speedrunning, analysed how speedrunning has grown since it's conception in the 1990's, and classified different types of speedrun \cite{ScullyBlaker, Hemmingsen, scully2014practiced}. However, research has rarely performed quantitative analyses of the online communities of speedrunners. Additionally, previous studies surrounding the speedrunning community are limited in scale and only concern a small portion of speedrunners.
+
+\subsection{Network Analysis and Community Detection}
+
+Online social networks have become more and more popular and facilitate user interaction. Traditionally, social networks represent the relationships between entities where entities may be `people' and the relationships are `friendship' \cite{ozturk_2014}. Real-world social networks naturally exhibit a community structure— the process for discovering this structure is known as community detection \cite{Bedi_Sharma_2016}. Communities are defined as groups of entities that are closer to each other than other entities in the network. This property is called homophily, where contact between similar people occurs at a higher rate than among dissimilar people \cite{mcpherson_lovin_cook_2001}. This characteristic may be exploited to discover trends within communities or to group customers with similar interests to increase sales \cite{Tang2010CommunityDA}.
+
+
+Community detection methods are either supervised or unsupervised, depending if some or all nodes are labelled \cite{chen2020supervised}. Unsupervised learning methods aim to group similar objects without prior knowledge of them \cite{Bedi_Sharma_2016}. Three examples of unsupervised community detection algorithms are Louvain, Clauset-Newman-Moore, and Infomap. Community detection algorithms aim to maximise the modularity of the communities: a scalar value between 1 and -1 that measures the density of links inside communities as compared to links between communities \cite{modularity}. Modularity is both a method of comparing the quality of communities, and an objective function to optimise \cite{louvain}.
+
+
+The Louvain algorithm is a two-phase agglomerative algorithm: separating each node into a single community and merging communities if there is an increase in overall modularity. This is repeated until there is no improvement in modularity by combining communities. The second phase of the algorithm is to create a meta-network so communities are a single node. The weighted edges between these new nodes are the sum of the weighted edges of the original community. These phases are repeated iteratively until a maximum modularity is obtained \cite{louvain}. The time complexity of this algorithm is unknown. However, $O(m)$ and $O(n \log^2 n)$ are observed empirically, where $n$ is the number of nodes and $m$ is the number of edges. \cite{Bedi_Sharma_2016, lancichinetti_fortunato_2009}.
+
+
+Clauset et al. developed the Clauset-Newman-Moore algorithm as a further optimisation of a previous algorithm \cite{Clauset_Newman_Moore_2004}. It uses a greedy modularity heuristic and operates like the first phase of the Louvain algorithm. Each node is part of a community, and communities are merged if they produce the largest increase in modularity. This is repeated until a single, large community is produced. The algorithm returns the communities with the largest modularity value. The time complexity is $O(n \log^2 n)$, equal to the Louvain algorithm. \cite{Clauset_Newman_Moore_2004}
+
+
+The Infomap algorithm by Rosvall et al. uses a separate methodology from the Clauset-Newman-Moore and Louvain algorithms. The method uses a series of random walks to generate a `cookbook' of codes to represent nodes in the network via Huffman coding. This encoding of nodes is then the input of hierarchical clustering to identify clusters of nodes \cite{infomap}. This allows the algorithm to describe the network with as few bits as possible \cite{lancichinetti_fortunato_2009}. The time complexity is $O(n \log n)$ on average \cite{infomap}.
+
+
+The performance of community detection methods is measured via quality functions which sum the qualities of nodes within a partition. Examples of these quality functions are modularity, coverage, and performance. Modularity has been defined earlier as the density of links inside communities compared to links between communities. Performance measures how many pairs of nodes are within the same community, and how many non-pairs are within different communities. Coverage measures how disconnected each of the clusters are by the ratio of number of edges in communities to the total number of edges \cite{Fortunato_2010}. 
+
+
+Centrality analysis is another branch of network analysis aiming to identify the flow of traffic through a network \cite{Borgatti_2005}. Various centralities have been devised to identify different structures within a network such as betweenness, degree, PageRank, and Hubs and Authorities (HITS). Degree centrality measures the popularity of a node based on it's degree. HITS uses the degree of nodes to define hubs and authorities, where authorities are the most relevant nodes in a network, and hubs are connected to many authorities. PageRank measures centrality by how often a simulated `user' will visit a node, and betweenness centrality determines how many times a node is used in other nodes' shortest paths \cite{Borgatti_2005, perra_fortunato_2008}. 
+
+\vspace{-15pt}
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{0.3\linewidth}
+    \centering
+    $$Q = \frac{1}{2m} \sum_{i,j} \left( A_{ij} - \frac{k_i k_j}{2m} \right) \delta(C_i, C_j)$$
+    \caption{Modularity}
+    \label{fig:figure1}
+  \end{subfigure}
+  \hspace{0.1\linewidth}
+  \begin{subfigure}{0.5\linewidth}
+    \centering
+    $$P(P) = \frac{| \{(i,j) \in E, C_i=C_j\}| + | \{(i,j) \notin {E}, C_i \neq C_j\}|}{n(n-1)/2}$$
+    \caption{Performance}
+    \label{fig:figure2}
+  \end{subfigure}
+  \caption{The equations for modularity and performance of communities.}
+  \label{fig:figures}
+\end{figure}
+\vspace{-20pt}
+
+\subsection{Recommendation Systems}
+
+To cope with the velocity, variety, and volatility of data on online social networks, recommendation systems have been employed to improve user experience by personalising content or creating new opportunities for marketing strategies. There are two popular methods used in recommendation systems: content-based filtering and collaborative filtering \cite{Eirinaki_Gao_Varlamis_Tserpes_2018}. Each user can be represented by the items that they have interacted with previously. Collaborative filtering recommends items to users by recommending items that are highly rated by similar users. Content-based filtering methods recommend items that are similar to items a user has interacted with previously \cite{Kazienko_Musial_Kajdanowicz_2011}. The recommendation functions within these methods range from the using neighbours of a bipartite user-item graph, or similarity functions using the features of user-item matrices \cite{Eirinaki_Gao_Varlamis_Tserpes_2018}. 
+
+
+Recommendation systems, particularly content-based and collaborative filtering, suffer from data sparsity and cold-start problems. Data sparsity is the issue of finding a reliable set of users who are similar to a target user. The cold-start problem refers to the issue of generating accurate recommendations for new users that do not have previous interests. Extra information is required to fix these problems, such as modelling social trust between users \cite{Guo_Zhang_Thalmann_2014}.
+
+
+Previous implementations of recommendation systems aim to predict a specific rating for a given user, not a binary categorisation of \textit{will play} or \textit{will not play}. Therefore, previous implementations use evaluation metrics such as coverage and Mean Average Error (MAE). In this context, coverage is the percentage of recommendations that are relevant to the users. MAE is the mean absolute difference between predicted ratings and an actual rating \cite{gupta2015performance}. Classification recommendation systems use metrics that determine the `relevance' of recommendations. Accuracy and recall are both measures of relevance. Accuracy measures the number of recommendations that a user has chosen or selected, and recall is the percentage of the total number of games a recommendation system can recommend \cite{herlocker2004evaluating}.
